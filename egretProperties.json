@@ -1,0 +1,42 @@
+{
+  "engineVersion": "5.4.0",
+  "compilerVersion": "5.4.0",
+  "template": {},
+  "target": {
+    "current": "web"
+  },
+  "modules": [
+    {
+      "name": "egret"
+    },
+    {
+      "name": "eui"
+    },
+    {
+      "name": "assetsmanager"
+    },
+    {
+      "name": "dragonBones"
+    },
+    {
+      "name": "game"
+    },
+    {
+      "name": "tween"
+    },
+    {
+      "name": "promise"
+    },
+    {
+      "name": "fairygui",
+      "path": "./libs/modules_ex/fairygui"
+    },
+    {
+      "name": "rawinflate",
+      "path": "./libs/modules_ex/rawinflate"
+    }
+  ],
+  "vivo": {
+    "usePlugin": true
+  }
+}
