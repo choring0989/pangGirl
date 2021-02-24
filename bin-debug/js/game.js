@@ -2795,30 +2795,29 @@ var egret;
             var self = this;
             var virtualUrl = loader._request.url;
             var sound = new egret.Sound();
-            this.sound = sound;
-            sound.addEventListener(egret.Event.COMPLETE, this.onSoundoadComplete, this);
-            sound.addEventListener(egret.IOErrorEvent.IO_ERROR, this.onSoundLoaderError, this);
-            sound.addEventListener(egret.ProgressEvent.PROGRESS, this.onSoundLoaderPostProgress, this);
+            sound.addEventListener(egret.Event.COMPLETE, onLoadComplete, self);
+            sound.addEventListener(egret.IOErrorEvent.IO_ERROR, onError, self);
+            sound.addEventListener(egret.ProgressEvent.PROGRESS, onPostProgress, self);
             sound.load(virtualUrl);
-        };
-        URLLoader.prototype.onSoundoadComplete = function (event) {
-            var _this = this;
-            this.removeSoundLoaderListeners();
-            this.data = this.sound;
-            window.setTimeout(function () {
-                _this.dispatchEventWith(egret.Event.COMPLETE);
-            }, 0);
-        };
-        URLLoader.prototype.onSoundLoaderPostProgress = function (event) {
-            this.dispatchEvent(event);
-        };
-        URLLoader.prototype.onSoundLoaderError = function (event) {
-            this.dispatchEvent(event);
-        };
-        URLLoader.prototype.removeSoundLoaderListeners = function () {
-            this.sound.removeEventListener(egret.Event.COMPLETE, this.onSoundoadComplete, this);
-            this.sound.removeEventListener(egret.IOErrorEvent.IO_ERROR, this.onSoundLoaderError, this);
-            this.sound.removeEventListener(egret.ProgressEvent.PROGRESS, this.onSoundLoaderPostProgress, this);
+            function onPostProgress(event) {
+                loader.dispatchEvent(event);
+            }
+            function onError(event) {
+                removeListeners();
+                loader.dispatchEvent(event);
+            }
+            function onLoadComplete(e) {
+                removeListeners();
+                loader.data = sound;
+                window.setTimeout(function () {
+                    loader.dispatchEventWith(egret.Event.COMPLETE);
+                }, 0);
+            }
+            function removeListeners() {
+                sound.removeEventListener(egret.Event.COMPLETE, onLoadComplete, self);
+                sound.removeEventListener(egret.IOErrorEvent.IO_ERROR, onError, self);
+                sound.removeEventListener(egret.ProgressEvent.PROGRESS, onPostProgress, self);
+            }
         };
         /**
          * @private
@@ -2826,38 +2825,38 @@ var egret;
          * @param loader
          */
         URLLoader.prototype.loadTexture = function (loader) {
-            this.virtualUrl = loader._request.url;
+            var self = this;
+            var virtualUrl = loader._request.url;
             var imageLoader = new egret.ImageLoader();
-            this.imageLoader = imageLoader;
-            imageLoader.addEventListener(egret.Event.COMPLETE, this.onImageLoadComplete, this);
-            imageLoader.addEventListener(egret.IOErrorEvent.IO_ERROR, this.onImageLoaderError, this);
-            imageLoader.addEventListener(egret.ProgressEvent.PROGRESS, this.onImageLoaderPostProgress, this);
-            imageLoader.load(this.virtualUrl);
-        };
-        URLLoader.prototype.onImageLoadComplete = function (event) {
-            var _this = this;
-            this.removeImageLoaderListeners();
-            var texture = new egret.Texture();
-            var bitmapData = this.imageLoader.data;
-            if (bitmapData.source.setAttribute) {
-                bitmapData.source.setAttribute("bitmapSrc", this.virtualUrl);
+            imageLoader.addEventListener(egret.Event.COMPLETE, onLoadComplete, self);
+            imageLoader.addEventListener(egret.IOErrorEvent.IO_ERROR, onError, self);
+            imageLoader.addEventListener(egret.ProgressEvent.PROGRESS, onPostProgress, self);
+            imageLoader.load(virtualUrl);
+            function onPostProgress(event) {
+                loader.dispatchEvent(event);
             }
-            texture._setBitmapData(bitmapData);
-            this.data = texture;
-            window.setTimeout(function () {
-                _this.dispatchEventWith(egret.Event.COMPLETE);
-            }, 0);
-        };
-        URLLoader.prototype.onImageLoaderPostProgress = function (event) {
-            this.dispatchEvent(event);
-        };
-        URLLoader.prototype.onImageLoaderError = function (event) {
-            this.dispatchEvent(event);
-        };
-        URLLoader.prototype.removeImageLoaderListeners = function () {
-            this.imageLoader.removeEventListener(egret.Event.COMPLETE, this.onImageLoadComplete, this);
-            this.imageLoader.removeEventListener(egret.IOErrorEvent.IO_ERROR, this.onImageLoaderError, this);
-            this.imageLoader.removeEventListener(egret.ProgressEvent.PROGRESS, this.onImageLoaderPostProgress, this);
+            function onError(event) {
+                removeListeners();
+                loader.dispatchEvent(event);
+            }
+            function onLoadComplete(e) {
+                removeListeners();
+                var bitmapData = imageLoader.data;
+                if (bitmapData.source.setAttribute) {
+                    bitmapData.source.setAttribute("bitmapSrc", virtualUrl);
+                }
+                var texture = new egret.Texture();
+                texture._setBitmapData(bitmapData);
+                loader.data = texture;
+                window.setTimeout(function () {
+                    loader.dispatchEventWith(egret.Event.COMPLETE);
+                }, 0);
+            }
+            function removeListeners() {
+                imageLoader.removeEventListener(egret.Event.COMPLETE, onLoadComplete, self);
+                imageLoader.removeEventListener(egret.IOErrorEvent.IO_ERROR, onError, self);
+                imageLoader.removeEventListener(egret.ProgressEvent.PROGRESS, onPostProgress, self);
+            }
         };
         /**
          * @private
@@ -3322,9 +3321,9 @@ var egret;
             else if (frameNum > this.$totalFrames) {
                 frameNum = this.$totalFrames;
             }
-            // if (frameNum == this.$nextFrameNum) {
-            //     return;
-            // }
+            if (frameNum == this.$nextFrameNum) {
+                return;
+            }
             this.$nextFrameNum = frameNum;
             this.advanceFrame();
             this.constructFrame();
@@ -3409,8 +3408,8 @@ var egret;
                     self.offsetPoint.x, self.offsetPoint.y, texture.$getScaleBitmapWidth(), texture.$getScaleBitmapHeight(),
                     texture.$sourceWidth, texture.$sourceHeight]);
                 //todo 负数offsetPoint
-                self.$nativeDisplayObject.setWidth(texture.$getTextureWidth());
-                self.$nativeDisplayObject.setHeight(texture.$getTextureHeight());
+                self.$nativeDisplayObject.setWidth(texture.$getTextureWidth() + self.offsetPoint.x);
+                self.$nativeDisplayObject.setHeight(texture.$getTextureHeight() + self.offsetPoint.y);
             }
             else {
                 var p = self.$parent;

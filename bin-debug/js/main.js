@@ -298,165 +298,51 @@ var __reflect = function(p, c, t) {
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/AssetAdapter.ts":
-/***/ (function(module, exports) {
-
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var AssetAdapter = /** @class */ (function () {
-    function AssetAdapter() {
-    }
-    /**
-     * @language zh_CN
-     * 解析素材
-     * @param source 待解析的新素材标识符
-     * @param compFunc 解析完成回调函数，示例：callBack(content:any,source:string):void;
-     * @param thisObject callBack的 this 引用
-     */
-    AssetAdapter.prototype.getAsset = function (source, compFunc, thisObject) {
-        function onGetRes(data) {
-            compFunc.call(thisObject, data, source);
-        }
-        if (RES.hasRes(source)) {
-            var data = RES.getRes(source);
-            if (data) {
-                onGetRes(data);
-            }
-            else {
-                RES.getResAsync(source, onGetRes, this);
-            }
-        }
-        else {
-            RES.getResByUrl(source, onGetRes, this, RES.ResourceItem.TYPE_IMAGE);
-        }
-    };
-    return AssetAdapter;
-}());
-window["AssetAdapter"] = AssetAdapter;
-__reflect(AssetAdapter.prototype,"AssetAdapter",["eui.IAssetAdapter"]); 
-
-
-/***/ }),
-
 /***/ "./src/Main.ts":
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__("./src/AssetAdapter.ts");
 __webpack_require__("./src/Main.ts");
 __webpack_require__("./src/Platform.ts");
 __webpack_require__("./src/ResourceLoader.ts");
-__webpack_require__("./src/ThemeAdapter.ts");
-var Main = /** @class */ (function (_super) {
-    __extends(Main, _super);
+var Main = /** @class */ (function (_super_1) {
+    __extends(Main, _super_1);
     function Main() {
-        var _this = _super.call(this) || this;
+        var _this = _super_1.call(this) || this;
         _this.gameSceneStart();
         return _this;
     }
     Main.prototype.gameSceneStart = function () {
-        this.loader = new ResourceLoader();
-        this.loader.loadResource("preload", "resource/default.res.json");
-        this.loader.loadResource("loader", "resource/default.res.json");
-        this.loader.createPackage("stage1");
-        this.loader.createObj("stage1", "Component1");
-        //this.createLoader();
-        //this.createGameScene();
-        //const result = await RES.getResAsync("description_json")
-        //await platform.login();
-        //const userInfo = await platform.getUserInfo();
-        //console.log(userInfo);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.createLoader();
+                return [2 /*return*/];
+            });
+        });
     };
     Main.prototype.createLoader = function () {
-        this.addChild(this.loader.createObj("loader", "loader_component").displayObject);
-        this.loadMainResource();
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.loader = new ResourceLoader();
+                        return [4 /*yield*/, this.loader.loadResource("ingame", "resource/default.res.json")];
+                    case 1:
+                        _a.sent();
+                        this.loader.createPackage("stage");
+                        this.addChild(this.loader.createObj("stage", "stage1").displayObject);
+                        this.loadMainResource();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     Main.prototype.loadMainResource = function () {
     };
     Main.prototype.loadMainResourceComplete = function () {
-        this.onProgress(40);
+        //this.onProgress(40);
     };
     Main.prototype.onProgress = function (current) {
         //this.txtLoading.text = `Loading...${current}/${total}`;
-    };
-    Main.prototype.loadTheme = function () {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            var theme = new eui.Theme("resource/default.thm.json", _this.stage);
-            theme.addEventListener(eui.UIEvent.COMPLETE, function () {
-                resolve();
-            }, _this);
-        });
-    };
-    Main.prototype.createGameScene = function () {
-        var sky = this.createBitmapByName("bg_jpg");
-        this.addChild(sky);
-        var stageW = this.stage.stageWidth;
-        var stageH = this.stage.stageHeight;
-        sky.width = stageW;
-        sky.height = stageH;
-        var topMask = new egret.Shape();
-        topMask.graphics.beginFill(0x000000, 0.5);
-        topMask.graphics.drawRect(0, 0, stageW, 172);
-        topMask.graphics.endFill();
-        topMask.y = 33;
-        this.addChild(topMask);
-        var icon = this.createBitmapByName("egret_icon_png");
-        this.addChild(icon);
-        icon.x = 26;
-        icon.y = 33;
-        var line = new egret.Shape();
-        line.graphics.lineStyle(2, 0xffffff);
-        line.graphics.moveTo(0, 0);
-        line.graphics.lineTo(0, 117);
-        line.graphics.endFill();
-        line.x = 172;
-        line.y = 61;
-        this.addChild(line);
-        var colorLabel = new egret.TextField();
-        colorLabel.textColor = 0xffffff;
-        colorLabel.width = stageW - 172;
-        colorLabel.textAlign = "center";
-        colorLabel.text = "Hello Egret";
-        colorLabel.size = 24;
-        colorLabel.x = 172;
-        colorLabel.y = 80;
-        this.addChild(colorLabel);
-        var textfield = new egret.TextField();
-        this.addChild(textfield);
-        textfield.alpha = 0;
-        textfield.width = stageW - 172;
-        textfield.textAlign = egret.HorizontalAlign.CENTER;
-        textfield.size = 24;
-        textfield.textColor = 0xffffff;
-        textfield.x = 172;
-        textfield.y = 135;
-        this.textfield = textfield;
     };
     Main.prototype.createBitmapByName = function (name) {
         var result = new egret.Bitmap();
@@ -517,13 +403,14 @@ var ResourceLoader = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
-                        return [4 /*yield*/, RES.loadConfig(path, "/resource")];
+                        return [4 /*yield*/, RES.loadConfig(path, "resource/")];
                     case 1:
                         //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
                         _a.sent();
                         return [4 /*yield*/, RES.loadGroup(key, 0)];
                     case 2:
                         _a.sent();
+                        console.log("Load Complete!! [" + path + "]" + key);
                         return [3 /*break*/, 4];
                     case 3:
                         e_1 = _a.sent();
@@ -534,125 +421,23 @@ var ResourceLoader = /** @class */ (function () {
             });
         });
     };
-    ResourceLoader.prototype.onProgress = function (current, total) {
-        console.log("Loading..." + current + "/" + total);
-    };
     ResourceLoader.prototype.createPackage = function (pkgName) {
         //if (fgui.GRoot.inst.displayObject.parent == null) fairygui.GRoot.inst.displayObject;
-        fgui.UIPackage.addPackage(pkgName);
-        console.log("Package Created!! @" + pkgName);
+        console.log("createPackage: " + pkgName);
+        fairygui.UIPackage.addPackage(pkgName);
+        console.log("Package Created!! " + pkgName);
     };
     ResourceLoader.prototype.createObj = function (pkgName, objName) {
+        console.log("createObj: " + pkgName);
         var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
         fairygui.GRoot.inst.addChild(obj);
-        console.log("Object Created!! @" + objName);
+        console.log("Object Created!! " + objName);
         return obj;
     };
     return ResourceLoader;
 }());
 window["ResourceLoader"] = ResourceLoader;
-__reflect(ResourceLoader.prototype,"ResourceLoader",["RES.PromiseTaskReporter"]); 
-
-
-/***/ }),
-
-/***/ "./src/ThemeAdapter.ts":
-/***/ (function(module, exports) {
-
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-present, Egret Technology.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var ThemeAdapter = /** @class */ (function () {
-    function ThemeAdapter() {
-    }
-    /**
-     * 解析主题
-     * @param url 待解析的主题url
-     * @param onSuccess 解析完成回调函数，示例：compFunc(e:egret.Event):void;
-     * @param onError 解析失败回调函数，示例：errorFunc():void;
-     * @param thisObject 回调的this引用
-     */
-    ThemeAdapter.prototype.getTheme = function (url, onSuccess, onError, thisObject) {
-        var _this = this;
-        function onResGet(e) {
-            onSuccess.call(thisObject, e);
-        }
-        function onResError(e) {
-            if (e.resItem.url == url) {
-                RES.removeEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, onResError, null);
-                onError.call(thisObject);
-            }
-        }
-        if (typeof generateEUI !== 'undefined') {
-            egret.callLater(function () {
-                onSuccess.call(thisObject, generateEUI);
-            }, this);
-        }
-        else if (typeof generateEUI2 !== 'undefined') {
-            RES.getResByUrl("resource/gameEui.json", function (data, url) {
-                window["JSONParseClass"]["setData"](data);
-                egret.callLater(function () {
-                    onSuccess.call(thisObject, generateEUI2);
-                }, _this);
-            }, this, RES.ResourceItem.TYPE_JSON);
-        }
-        else if (typeof generateJSON !== 'undefined') {
-            if (url.indexOf(".exml") > -1) {
-                var dirPath = url.replace(".exml", "_EUI.json");
-                if (!generateJSON.paths[url]) {
-                    RES.getResByUrl(dirPath, function (data) {
-                        window["JSONParseClass"]["setData"](data);
-                        egret.callLater(function () {
-                            onSuccess.call(thisObject, generateJSON.paths[url]);
-                        }, _this);
-                    }, this, RES.ResourceItem.TYPE_JSON);
-                }
-                else {
-                    egret.callLater(function () {
-                        onSuccess.call(thisObject, generateJSON.paths[url]);
-                    }, this);
-                }
-            }
-            else {
-                egret.callLater(function () {
-                    onSuccess.call(thisObject, generateJSON);
-                }, this);
-            }
-        }
-        else {
-            RES.addEventListener(RES.ResourceEvent.ITEM_LOAD_ERROR, onResError, null);
-            RES.getResByUrl(url, onResGet, this, RES.ResourceItem.TYPE_TEXT);
-        }
-    };
-    return ThemeAdapter;
-}());
-window["ThemeAdapter"] = ThemeAdapter;
-__reflect(ThemeAdapter.prototype,"ThemeAdapter",["eui.IThemeAdapter"]); 
+__reflect(ResourceLoader.prototype,"ResourceLoader",[]); 
 
 
 /***/ })

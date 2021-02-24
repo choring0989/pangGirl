@@ -2,7 +2,6 @@
 	"initial": [
 		"js/egret.js",
 		"js/egret.web.js",
-		"js/eui.js",
 		"js/assetsmanager.js",
 		"js/dragonBones.js",
 		"js/game.js",

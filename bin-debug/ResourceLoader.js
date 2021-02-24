@@ -47,13 +47,14 @@ var ResourceLoader = (function () {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
                         //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
-                        return [4 /*yield*/, RES.loadConfig(path, "/resource")];
+                        return [4 /*yield*/, RES.loadConfig(path, "resource/")];
                     case 1:
                         //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
                         _a.sent();
                         return [4 /*yield*/, RES.loadGroup(key, 0)];
                     case 2:
                         _a.sent();
+                        console.log("Load Complete!! [" + path + "]" + key);
                         return [3 /*break*/, 4];
                     case 3:
                         e_1 = _a.sent();
@@ -64,20 +65,19 @@ var ResourceLoader = (function () {
             });
         });
     };
-    ResourceLoader.prototype.onProgress = function (current, total) {
-        console.log("Loading..." + current + "/" + total);
-    };
     ResourceLoader.prototype.createPackage = function (pkgName) {
         //if (fgui.GRoot.inst.displayObject.parent == null) fairygui.GRoot.inst.displayObject;
-        fgui.UIPackage.addPackage(pkgName);
-        console.log("Package Created!! @" + pkgName);
+        console.log("createPackage: " + pkgName);
+        fairygui.UIPackage.addPackage(pkgName);
+        console.log("Package Created!! " + pkgName);
     };
     ResourceLoader.prototype.createObj = function (pkgName, objName) {
+        console.log("createObj: " + pkgName);
         var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
         fairygui.GRoot.inst.addChild(obj);
-        console.log("Object Created!! @" + objName);
+        console.log("Object Created!! " + objName);
         return obj;
     };
     return ResourceLoader;
 }());
-__reflect(ResourceLoader.prototype, "ResourceLoader", ["RES.PromiseTaskReporter"]);
+__reflect(ResourceLoader.prototype, "ResourceLoader");

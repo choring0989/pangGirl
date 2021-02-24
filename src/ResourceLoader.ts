@@ -1,35 +1,35 @@
-class ResourceLoader implements RES.PromiseTaskReporter{
-    
+class ResourceLoader {
+
     public constructor() {
 
     }
 
-    public async loadResource(key:string, path:string) {
+    public async loadResource(key: string, path: string) {
         try {
             //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
-            await RES.loadConfig(path, "/resource");
+            await RES.loadConfig(path, "resource/");
             await RES.loadGroup(key, 0);
+            console.log("Load Complete!! [" + path + "]" + key);
             //RES.removeEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
         }
         catch (e) {
             console.error(e);
         }
-    }   
-
-    public onProgress(current: number, total: number): void {
-       console.log(`Loading...${current}/${total}`);
     }
 
     public createPackage(pkgName) {
         //if (fgui.GRoot.inst.displayObject.parent == null) fairygui.GRoot.inst.displayObject;
-        fgui.UIPackage.addPackage(pkgName);
-        console.log("Package Created!! @" + pkgName);
+        console.log("createPackage: " + pkgName);
+        fairygui.UIPackage.addPackage(pkgName);
+        console.log("Package Created!! " + pkgName);
     }
 
-    public createObj(pkgName, objName):fairygui.GObject {
-        var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
+    public createObj(pkgName, objName): fairygui.GObject {
+        console.log("createObj: " + pkgName);
+
+        let obj: fgui.GComponent = fairygui.UIPackage.createObject(pkgName, objName).asCom;
         fairygui.GRoot.inst.addChild(obj);
-        console.log("Object Created!! @" + objName);
+        console.log("Object Created!! " + objName);
         return obj;
     }
 }
