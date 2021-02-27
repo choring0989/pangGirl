@@ -11,8 +11,10 @@
 		"libs/modules_ex/rawinflate/rawinflate.js"
 	],
 	"game": [
+		"bin-debug/Character.js",
 		"bin-debug/Main.js",
 		"bin-debug/Platform.js",
-		"bin-debug/ResourceLoader.js"
+		"bin-debug/ResourceLoader.js",
+		"bin-debug/Stage.js"
 	]
 }

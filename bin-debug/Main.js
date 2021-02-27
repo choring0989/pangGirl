@@ -63,7 +63,7 @@ var Main = (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.loader = new ResourceLoader();
+                        Main.loader = new ResourceLoader();
                         return [4 /*yield*/, this.loadMainResource()];
                     case 1:
                         _a.sent();
@@ -80,7 +80,7 @@ var Main = (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.loader.loadResource("ingame", "resource/default.res.json")];
+                    case 0: return [4 /*yield*/, Main.loader.loadResource("ingame", "resource/default.res.json")];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -93,7 +93,6 @@ var Main = (function (_super) {
     };
     Main.prototype.createMainPackage = function (pkgNames) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -101,7 +100,7 @@ var Main = (function (_super) {
                             console.log("패키지 이름을 넣어");
                             return [2 /*return*/];
                         }
-                        return [4 /*yield*/, pkgNames.forEach(function (pkg) { _this.loader.createPackage(pkg); })];
+                        return [4 /*yield*/, pkgNames.forEach(function (pkg) { Main.loader.createPackage(pkg); })];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -110,13 +109,14 @@ var Main = (function (_super) {
         });
     };
     Main.prototype.temp = function () {
-        this.stage1 = this.loader.createObj("stage", "stage1").asCom;
-        this.addChild(this.stage1.displayObject);
-        this.hito = this.loader.createObj("sprite", "hito").asCom;
-        this.hito.x = this.width / 2;
-        this.hito.y = this.height / 2;
-        this.addChild(this.stage1.displayObject);
-        this.addChild(this.hito.displayObject);
+        this.scaleX *= 2;
+        this.scaleY *= 2;
+        Main.stage = new Stage(Main.loader.createObj("stage", "stage1").asCom);
+        this.addChild(Main.stage);
+        Main.stage.onStart();
+        Main.hito = new Character(Main.loader.createObj("sprite", "hito").asCom);
+        Main.stage.addChild(Main.hito);
+        Main.hito.onStart();
     };
     Main.prototype.onProgress = function (current) {
         //this.txtLoading.text = `Loading...${current}/${total}`;

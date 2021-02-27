@@ -298,12 +298,59 @@ var __reflect = function(p, c, t) {
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/Character.ts":
+/***/ (function(module, exports) {
+
+var Character = /** @class */ (function (_super_1) {
+    __extends(Character, _super_1);
+    function Character(h) {
+        var _this = _super_1.call(this) || this;
+        _this.human = h;
+        return _this;
+    }
+    Character.prototype.onStart = function () {
+        this.initialize();
+    };
+    Character.prototype.initialize = function () {
+        var _this = this;
+        this.addChild(this.human.asCom.displayObject);
+        this.human.x = 150;
+        this.human.y = 150;
+        window.addEventListener("keydown", function (e) {
+            if (e.keyCode == 37 && _this.human.x > 0 && (Main.stage.blocked.get(_this.human.x) != _this.human.y)) {
+                _this.human.getController("c1").selectedPage = "left";
+                _this.human.x -= 8;
+            }
+            if (e.keyCode == 38 && _this.human.y > 0 && (Main.stage.blocked.get(_this.human.x) != _this.human.y)) {
+                _this.human.getController("c1").selectedPage = "back";
+                _this.human.y -= 8;
+            }
+            if (e.keyCode == 39 && _this.human.x < (Main.stage.field.width - 32) && (Main.stage.blocked.get(_this.human.x) != _this.human.y)) {
+                _this.human.getController("c1").selectedPage = "right";
+                _this.human.x += 8;
+            }
+            if (e.keyCode == 40 && _this.human.y < (Main.stage.field.height - 40) && (Main.stage.blocked.get(_this.human.x) != _this.human.y)) {
+                _this.human.getController("c1").selectedPage = "front";
+                _this.human.y += 8;
+            }
+        });
+    };
+    return Character;
+}(egret.Sprite));
+window["Character"] = Character;
+__reflect(Character.prototype,"Character",[]); 
+
+
+/***/ }),
+
 /***/ "./src/Main.ts":
 /***/ (function(module, exports, __webpack_require__) {
 
+__webpack_require__("./src/Character.ts");
 __webpack_require__("./src/Main.ts");
 __webpack_require__("./src/Platform.ts");
 __webpack_require__("./src/ResourceLoader.ts");
+__webpack_require__("./src/Stage.ts");
 var Main = /** @class */ (function (_super_1) {
     __extends(Main, _super_1);
     function Main() {
@@ -324,7 +371,7 @@ var Main = /** @class */ (function (_super_1) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.loader = new ResourceLoader();
+                        Main.loader = new ResourceLoader();
                         return [4 /*yield*/, this.loadMainResource()];
                     case 1:
                         _a.sent();
@@ -341,7 +388,7 @@ var Main = /** @class */ (function (_super_1) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.loader.loadResource("ingame", "resource/default.res.json")];
+                    case 0: return [4 /*yield*/, Main.loader.loadResource("ingame", "resource/default.res.json")];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -354,7 +401,6 @@ var Main = /** @class */ (function (_super_1) {
     };
     Main.prototype.createMainPackage = function (pkgNames) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -362,7 +408,7 @@ var Main = /** @class */ (function (_super_1) {
                             console.log("패키지 이름을 넣어");
                             return [2 /*return*/];
                         }
-                        return [4 /*yield*/, pkgNames.forEach(function (pkg) { _this.loader.createPackage(pkg); })];
+                        return [4 /*yield*/, pkgNames.forEach(function (pkg) { Main.loader.createPackage(pkg); })];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -371,13 +417,14 @@ var Main = /** @class */ (function (_super_1) {
         });
     };
     Main.prototype.temp = function () {
-        this.stage1 = this.loader.createObj("stage", "stage1").asCom;
-        this.addChild(this.stage1.displayObject);
-        this.hito = this.loader.createObj("sprite", "hito").asCom;
-        this.hito.x = this.width / 2;
-        this.hito.y = this.height / 2;
-        this.addChild(this.stage1.displayObject);
-        this.addChild(this.hito.displayObject);
+        this.scaleX *= 2;
+        this.scaleY *= 2;
+        Main.stage = new Stage(Main.loader.createObj("stage", "stage1").asCom);
+        this.addChild(Main.stage);
+        Main.stage.onStart();
+        Main.hito = new Character(Main.loader.createObj("sprite", "hito").asCom);
+        Main.stage.addChild(Main.hito);
+        Main.hito.onStart();
     };
     Main.prototype.onProgress = function (current) {
         //this.txtLoading.text = `Loading...${current}/${total}`;
@@ -467,6 +514,38 @@ var ResourceLoader = /** @class */ (function () {
 }());
 window["ResourceLoader"] = ResourceLoader;
 __reflect(ResourceLoader.prototype,"ResourceLoader",[]); 
+
+
+/***/ }),
+
+/***/ "./src/Stage.ts":
+/***/ (function(module, exports) {
+
+var Stage = /** @class */ (function (_super_1) {
+    __extends(Stage, _super_1);
+    function Stage(f) {
+        var _this = _super_1.call(this) || this;
+        _this.blocked = new Map();
+        _this.field = f;
+        return _this;
+    }
+    Stage.prototype.onStart = function () {
+        this.initialize();
+    };
+    Stage.prototype.initialize = function () {
+        this.addChild(this.field.displayObject);
+        var aGroup = this.field.getChild("blocked").asGroup;
+        for (var i = 0; i < this.field.numChildren; i++) {
+            if (this.field.getChildAt(i).group == aGroup) {
+                for (var j = -8; j < 8; j++)
+                    this.blocked.set((this.field.getChildAt(i).x + j), (this.field.getChildAt(i).y + j));
+            }
+        }
+    };
+    return Stage;
+}(egret.Stage));
+window["Stage"] = Stage;
+__reflect(Stage.prototype,"Stage",[]); 
 
 
 /***/ })

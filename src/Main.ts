@@ -1,8 +1,8 @@
 class Main extends egret.DisplayObjectContainer {
 
-    public loader: ResourceLoader;
-    public stage1: fgui.GComponent;
-    public hito: fgui.GComponent;
+    public static loader: ResourceLoader;
+    public static stage: Stage;
+    public static hito: Character;
 
     public constructor() {
         super();
@@ -14,14 +14,14 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private async createLoader() {
-        this.loader = new ResourceLoader();
+        Main.loader = new ResourceLoader();
         await this.loadMainResource();
         await this.createMainPackage(["stage", "sprite"]);
         this.temp();
     }
 
     private async loadMainResource() {
-        await this.loader.loadResource("ingame", "resource/default.res.json");
+        await Main.loader.loadResource("ingame", "resource/default.res.json");
     }
 
     private loadMainResourceComplete() {
@@ -33,18 +33,20 @@ class Main extends egret.DisplayObjectContainer {
             console.log("패키지 이름을 넣어");
             return;
         }
-        await pkgNames.forEach((pkg) => { this.loader.createPackage(pkg); })
+        await pkgNames.forEach((pkg) => { Main.loader.createPackage(pkg); })
     }
 
     private temp() {
-        this.stage1 = this.loader.createObj("stage", "stage1").asCom;
-        this.addChild(this.stage1.displayObject);
+        this.scaleX *= 2;
+        this.scaleY *= 2;
 
-        this.hito = this.loader.createObj("sprite", "hito").asCom;
-        this.hito.x = this.width / 2;
-        this.hito.y = this.height / 2;
-        this.addChild(this.stage1.displayObject);
-        this.addChild(this.hito.displayObject);
+        Main.stage = new Stage(Main.loader.createObj("stage", "stage1").asCom);
+        this.addChild(Main.stage);
+        Main.stage.onStart();
+
+        Main.hito = new Character(Main.loader.createObj("sprite", "hito").asCom);
+        Main.stage.addChild(Main.hito);
+        Main.hito.onStart();
     }
 
     public onProgress(current: number): void {
