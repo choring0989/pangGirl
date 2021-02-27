@@ -1,8 +1,12 @@
 {
 	"groups": [
 		{
-			"keys": "stage,stage_atlas0",
+			"keys": "stage,stage_atlas0,sprite_atlas0,sprite",
 			"name": "ingame"
+		},
+		{
+			"keys": "",
+			"name": "preload"
 		}
 	],
 	"resources": [
@@ -15,6 +19,16 @@
 			"url": "fairy/stage_atlas0.png",
 			"type": "image",
 			"name": "stage_atlas0"
+		},
+		{
+			"url": "fairy/sprite_atlas0.png",
+			"type": "image",
+			"name": "sprite_atlas0"
+		},
+		{
+			"url": "fairy/sprite.fui",
+			"type": "bin",
+			"name": "sprite"
 		}
 	]
 }

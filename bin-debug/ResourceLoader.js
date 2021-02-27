@@ -66,13 +66,10 @@ var ResourceLoader = (function () {
         });
     };
     ResourceLoader.prototype.createPackage = function (pkgName) {
-        //if (fgui.GRoot.inst.displayObject.parent == null) fairygui.GRoot.inst.displayObject;
-        console.log("createPackage: " + pkgName);
         fairygui.UIPackage.addPackage(pkgName);
         console.log("Package Created!! " + pkgName);
     };
     ResourceLoader.prototype.createObj = function (pkgName, objName) {
-        console.log("createObj: " + pkgName);
         var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
         fairygui.GRoot.inst.addChild(obj);
         console.log("Object Created!! " + objName);

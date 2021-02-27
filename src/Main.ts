@@ -1,6 +1,8 @@
 class Main extends egret.DisplayObjectContainer {
 
-    public loader:ResourceLoader;
+    public loader: ResourceLoader;
+    public stage1: fgui.GComponent;
+    public hito: fgui.GComponent;
 
     public constructor() {
         super();
@@ -13,30 +15,40 @@ class Main extends egret.DisplayObjectContainer {
 
     private async createLoader() {
         this.loader = new ResourceLoader();
-
-        await this.loader.loadResource("ingame", "resource/default.res.json");
-        this.loader.createPackage("stage");
-        this.addChild(this.loader.createObj("stage", "stage1").displayObject);
-
-        this.loadMainResource();
+        await this.loadMainResource();
+        await this.createMainPackage(["stage", "sprite"]);
+        this.temp();
     }
 
-    private loadMainResource() {
-        
+    private async loadMainResource() {
+        await this.loader.loadResource("ingame", "resource/default.res.json");
     }
 
     private loadMainResourceComplete() {
         //this.onProgress(40);
     }
 
-    public onProgress(current:number):void {
+    private async createMainPackage(pkgNames: Array<string>) {
+        if (pkgNames.length < 1) {
+            console.log("패키지 이름을 넣어");
+            return;
+        }
+        await pkgNames.forEach((pkg) => { this.loader.createPackage(pkg); })
+    }
+
+    private temp() {
+        this.stage1 = this.loader.createObj("stage", "stage1").asCom;
+        this.addChild(this.stage1.displayObject);
+
+        this.hito = this.loader.createObj("sprite", "hito").asCom;
+        this.hito.x = this.width / 2;
+        this.hito.y = this.height / 2;
+        this.addChild(this.stage1.displayObject);
+        this.addChild(this.hito.displayObject);
+    }
+
+    public onProgress(current: number): void {
         //this.txtLoading.text = `Loading...${current}/${total}`;
     }
-    
-    private createBitmapByName(name: string): egret.Bitmap {
-        let result = new egret.Bitmap();
-        let texture: egret.Texture = RES.getRes(name);
-        result.texture = texture;
-        return result;
-    }
+
 }

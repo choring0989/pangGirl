@@ -18,15 +18,11 @@ class ResourceLoader {
     }
 
     public createPackage(pkgName) {
-        //if (fgui.GRoot.inst.displayObject.parent == null) fairygui.GRoot.inst.displayObject;
-        console.log("createPackage: " + pkgName);
         fairygui.UIPackage.addPackage(pkgName);
         console.log("Package Created!! " + pkgName);
     }
 
     public createObj(pkgName, objName): fairygui.GObject {
-        console.log("createObj: " + pkgName);
-
         let obj: fgui.GComponent = fairygui.UIPackage.createObject(pkgName, objName).asCom;
         fairygui.GRoot.inst.addChild(obj);
         console.log("Object Created!! " + objName);

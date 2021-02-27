@@ -64,30 +64,62 @@ var Main = (function (_super) {
                 switch (_a.label) {
                     case 0:
                         this.loader = new ResourceLoader();
-                        return [4 /*yield*/, this.loader.loadResource("ingame", "resource/default.res.json")];
+                        return [4 /*yield*/, this.loadMainResource()];
                     case 1:
                         _a.sent();
-                        this.loader.createPackage("stage");
-                        this.addChild(this.loader.createObj("stage", "stage1").displayObject);
-                        this.loadMainResource();
+                        return [4 /*yield*/, this.createMainPackage(["stage", "sprite"])];
+                    case 2:
+                        _a.sent();
+                        this.temp();
                         return [2 /*return*/];
                 }
             });
         });
     };
     Main.prototype.loadMainResource = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.loader.loadResource("ingame", "resource/default.res.json")];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     Main.prototype.loadMainResourceComplete = function () {
         //this.onProgress(40);
     };
+    Main.prototype.createMainPackage = function (pkgNames) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (pkgNames.length < 1) {
+                            console.log("패키지 이름을 넣어");
+                            return [2 /*return*/];
+                        }
+                        return [4 /*yield*/, pkgNames.forEach(function (pkg) { _this.loader.createPackage(pkg); })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Main.prototype.temp = function () {
+        this.stage1 = this.loader.createObj("stage", "stage1").asCom;
+        this.addChild(this.stage1.displayObject);
+        this.hito = this.loader.createObj("sprite", "hito").asCom;
+        this.hito.x = this.width / 2;
+        this.hito.y = this.height / 2;
+        this.addChild(this.stage1.displayObject);
+        this.addChild(this.hito.displayObject);
+    };
     Main.prototype.onProgress = function (current) {
         //this.txtLoading.text = `Loading...${current}/${total}`;
-    };
-    Main.prototype.createBitmapByName = function (name) {
-        var result = new egret.Bitmap();
-        var texture = RES.getRes(name);
-        result.texture = texture;
-        return result;
     };
     return Main;
 }(egret.DisplayObjectContainer));
