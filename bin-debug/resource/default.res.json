@@ -7,6 +7,10 @@
 		{
 			"keys": "",
 			"name": "preload"
+		},
+		{
+			"keys": "UI,UI_atlas0",
+			"name": "ui"
 		}
 	],
 	"resources": [
@@ -29,6 +33,16 @@
 			"url": "fairy/sprite.fui",
 			"type": "bin",
 			"name": "sprite"
+		},
+		{
+			"url": "fairy/UI_atlas0.png",
+			"type": "image",
+			"name": "UI_atlas0"
+		},
+		{
+			"url": "fairy/UI.fui",
+			"type": "bin",
+			"name": "UI"
 		}
 	]
 }

@@ -16,11 +16,12 @@ class Main extends egret.DisplayObjectContainer {
     private async createLoader() {
         Main.loader = new ResourceLoader();
         await this.loadMainResource();
-        await this.createMainPackage(["stage", "sprite"]);
+        await this.createMainPackage(["stage", "sprite", "UI"]);
         this.temp();
     }
 
     private async loadMainResource() {
+        await Main.loader.loadResource("ui", "resource/default.res.json");
         await Main.loader.loadResource("ingame", "resource/default.res.json");
     }
 
@@ -37,8 +38,8 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private temp() {
-        this.scaleX *= 2;
-        this.scaleY *= 2;
+        // this.scaleX *= 2;
+        // this.scaleY *= 2;
 
         Main.stage = new Stage(Main.loader.createObj("stage", "stage1").asCom);
         this.addChild(Main.stage);
@@ -47,6 +48,8 @@ class Main extends egret.DisplayObjectContainer {
         Main.hito = new Character(Main.loader.createObj("sprite", "hito").asCom);
         Main.stage.addChild(Main.hito);
         Main.hito.onStart();
+
+        this.addChild(Main.loader.createObj("UI", "inven").asCom.displayObject);
     }
 
     public onProgress(current: number): void {

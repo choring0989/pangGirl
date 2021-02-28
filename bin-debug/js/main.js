@@ -305,6 +305,7 @@ var Character = /** @class */ (function (_super_1) {
     __extends(Character, _super_1);
     function Character(h) {
         var _this = _super_1.call(this) || this;
+        _this.interpol = 8;
         _this.human = h;
         return _this;
     }
@@ -317,21 +318,29 @@ var Character = /** @class */ (function (_super_1) {
         this.human.x = 150;
         this.human.y = 150;
         window.addEventListener("keydown", function (e) {
-            if (e.keyCode == 37 && _this.human.x > 0 && (Main.stage.blocked.get(_this.human.x) != _this.human.y)) {
+            if (e.keyCode == 37 && _this.human.x > 0) {
                 _this.human.getController("c1").selectedPage = "left";
-                _this.human.x -= 8;
+                if (Main.stage.blocked.has((_this.human.x - _this.interpol) + "," + _this.human.y))
+                    return;
+                _this.human.x -= _this.interpol;
             }
-            if (e.keyCode == 38 && _this.human.y > 0 && (Main.stage.blocked.get(_this.human.x) != _this.human.y)) {
+            if (e.keyCode == 38 && _this.human.y > 0) {
                 _this.human.getController("c1").selectedPage = "back";
-                _this.human.y -= 8;
+                if (Main.stage.blocked.has(_this.human.x + "," + (_this.human.y - _this.interpol)))
+                    return;
+                _this.human.y -= _this.interpol;
             }
-            if (e.keyCode == 39 && _this.human.x < (Main.stage.field.width - 32) && (Main.stage.blocked.get(_this.human.x) != _this.human.y)) {
+            if (e.keyCode == 39 && _this.human.x < (Main.stage.field.width - _this.interpol * 4)) {
                 _this.human.getController("c1").selectedPage = "right";
-                _this.human.x += 8;
+                if (Main.stage.blocked.has((_this.human.x + _this.interpol) + "," + _this.human.y))
+                    return;
+                _this.human.x += _this.interpol;
             }
-            if (e.keyCode == 40 && _this.human.y < (Main.stage.field.height - 40) && (Main.stage.blocked.get(_this.human.x) != _this.human.y)) {
+            if (e.keyCode == 40 && _this.human.y < (Main.stage.field.height - _this.interpol * 4)) {
                 _this.human.getController("c1").selectedPage = "front";
-                _this.human.y += 8;
+                if (Main.stage.blocked.has(_this.human.x + "," + (_this.human.y + _this.interpol)))
+                    return;
+                _this.human.y += _this.interpol;
             }
         });
     };
@@ -375,7 +384,7 @@ var Main = /** @class */ (function (_super_1) {
                         return [4 /*yield*/, this.loadMainResource()];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.createMainPackage(["stage", "sprite"])];
+                        return [4 /*yield*/, this.createMainPackage(["stage", "sprite", "UI"])];
                     case 2:
                         _a.sent();
                         this.temp();
@@ -388,8 +397,11 @@ var Main = /** @class */ (function (_super_1) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, Main.loader.loadResource("ingame", "resource/default.res.json")];
+                    case 0: return [4 /*yield*/, Main.loader.loadResource("ui", "resource/default.res.json")];
                     case 1:
+                        _a.sent();
+                        return [4 /*yield*/, Main.loader.loadResource("ingame", "resource/default.res.json")];
+                    case 2:
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -417,14 +429,15 @@ var Main = /** @class */ (function (_super_1) {
         });
     };
     Main.prototype.temp = function () {
-        this.scaleX *= 2;
-        this.scaleY *= 2;
+        // this.scaleX *= 2;
+        // this.scaleY *= 2;
         Main.stage = new Stage(Main.loader.createObj("stage", "stage1").asCom);
         this.addChild(Main.stage);
         Main.stage.onStart();
         Main.hito = new Character(Main.loader.createObj("sprite", "hito").asCom);
         Main.stage.addChild(Main.hito);
         Main.hito.onStart();
+        this.addChild(Main.loader.createObj("UI", "inven").asCom.displayObject);
     };
     Main.prototype.onProgress = function (current) {
         //this.txtLoading.text = `Loading...${current}/${total}`;
@@ -525,7 +538,7 @@ var Stage = /** @class */ (function (_super_1) {
     __extends(Stage, _super_1);
     function Stage(f) {
         var _this = _super_1.call(this) || this;
-        _this.blocked = new Map();
+        _this.blocked = new Set();
         _this.field = f;
         return _this;
     }
@@ -534,11 +547,17 @@ var Stage = /** @class */ (function (_super_1) {
     };
     Stage.prototype.initialize = function () {
         this.addChild(this.field.displayObject);
+        this.setBlockObj();
+    };
+    Stage.prototype.setBlockObj = function () {
         var aGroup = this.field.getChild("blocked").asGroup;
         for (var i = 0; i < this.field.numChildren; i++) {
             if (this.field.getChildAt(i).group == aGroup) {
-                for (var j = -8; j < 8; j++)
-                    this.blocked.set((this.field.getChildAt(i).x + j), (this.field.getChildAt(i).y + j));
+                for (var j = -18; j < 19; j++) {
+                    for (var k = -24; k < 9; k++) {
+                        this.blocked.add((this.field.getChildAt(i).x + j) + "," + (this.field.getChildAt(i).y + k));
+                    }
+                }
             }
         }
     };

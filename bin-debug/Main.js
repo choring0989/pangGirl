@@ -67,7 +67,7 @@ var Main = (function (_super) {
                         return [4 /*yield*/, this.loadMainResource()];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.createMainPackage(["stage", "sprite"])];
+                        return [4 /*yield*/, this.createMainPackage(["stage", "sprite", "UI"])];
                     case 2:
                         _a.sent();
                         this.temp();
@@ -80,8 +80,11 @@ var Main = (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, Main.loader.loadResource("ingame", "resource/default.res.json")];
+                    case 0: return [4 /*yield*/, Main.loader.loadResource("ui", "resource/default.res.json")];
                     case 1:
+                        _a.sent();
+                        return [4 /*yield*/, Main.loader.loadResource("ingame", "resource/default.res.json")];
+                    case 2:
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -109,14 +112,15 @@ var Main = (function (_super) {
         });
     };
     Main.prototype.temp = function () {
-        this.scaleX *= 2;
-        this.scaleY *= 2;
+        // this.scaleX *= 2;
+        // this.scaleY *= 2;
         Main.stage = new Stage(Main.loader.createObj("stage", "stage1").asCom);
         this.addChild(Main.stage);
         Main.stage.onStart();
         Main.hito = new Character(Main.loader.createObj("sprite", "hito").asCom);
         Main.stage.addChild(Main.hito);
         Main.hito.onStart();
+        this.addChild(Main.loader.createObj("UI", "inven").asCom.displayObject);
     };
     Main.prototype.onProgress = function (current) {
         //this.txtLoading.text = `Loading...${current}/${total}`;
