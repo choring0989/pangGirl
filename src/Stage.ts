@@ -17,10 +17,10 @@ class Stage extends egret.Stage {
     }
 
     public setBlockObj() {
-        let aGroup = this.field.getChild("blocked").asGroup;
+        let groups = this.field.getChild("blocked").asGroup;
 
         for (let i = 0; i < this.field.numChildren; i++) {
-            if (this.field.getChildAt(i).group == aGroup) {
+            if (this.field.getChildAt(i).group == groups) {
                 for (let j = -18; j < 19; j++) {
                     for (let k = -24; k < 9; k++) {
                         this.blocked.add((this.field.getChildAt(i).x + j) + "," + (this.field.getChildAt(i).y + k));

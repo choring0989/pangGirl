@@ -39,6 +39,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var ResourceLoader = (function () {
     function ResourceLoader() {
     }
+    ResourceLoader.prototype.createPackage = function (pkgName) {
+        fairygui.UIPackage.addPackage(pkgName);
+        console.log("Package Created!! " + pkgName);
+    };
+    ResourceLoader.prototype.createObj = function (pkgName, objName) {
+        var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
+        fairygui.GRoot.inst.addChild(obj);
+        console.log("Object Created!! " + objName);
+        return obj;
+    };
     ResourceLoader.prototype.loadResource = function (key, path) {
         return __awaiter(this, void 0, void 0, function () {
             var e_1;
@@ -65,15 +75,51 @@ var ResourceLoader = (function () {
             });
         });
     };
-    ResourceLoader.prototype.createPackage = function (pkgName) {
-        fairygui.UIPackage.addPackage(pkgName);
-        console.log("Package Created!! " + pkgName);
+    ResourceLoader.prototype.loadMainResource = function (grpNames, path) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _i, grpNames_1, grp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _i = 0, grpNames_1 = grpNames;
+                        _a.label = 1;
+                    case 1:
+                        if (!(_i < grpNames_1.length)) return [3 /*break*/, 4];
+                        grp = grpNames_1[_i];
+                        return [4 /*yield*/, this.loadResource(grp, path)];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
     };
-    ResourceLoader.prototype.createObj = function (pkgName, objName) {
-        var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
-        fairygui.GRoot.inst.addChild(obj);
-        console.log("Object Created!! " + objName);
-        return obj;
+    ResourceLoader.prototype.createMainPackage = function (pkgNames) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _i, pkgNames_1, pkg;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _i = 0, pkgNames_1 = pkgNames;
+                        _a.label = 1;
+                    case 1:
+                        if (!(_i < pkgNames_1.length)) return [3 /*break*/, 4];
+                        pkg = pkgNames_1[_i];
+                        return [4 /*yield*/, this.createPackage(pkg)];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3:
+                        _i++;
+                        return [3 /*break*/, 1];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
     };
     return ResourceLoader;
 }());

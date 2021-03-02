@@ -4,6 +4,14 @@ class ResourceLoader {
 
     }
 
+    public async loadMainResource(grpNames: Array<string>, path: string) {
+        for (let grp of grpNames) await this.loadResource(grp, path);
+    }
+
+    public async createMainPackage(pkgNames: Array<string>) {
+        for (let pkg of pkgNames) await this.createPackage(pkg);
+    }
+
     public async loadResource(key: string, path: string) {
         try {
             //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
@@ -28,4 +36,5 @@ class ResourceLoader {
         console.log("Object Created!! " + objName);
         return obj;
     }
+
 }

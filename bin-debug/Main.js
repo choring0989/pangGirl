@@ -53,77 +53,11 @@ var Main = (function (_super) {
     Main.prototype.gameSceneStart = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                this.createLoader();
+                this.scene = new SceneManager(this);
+                this.scene.onStart();
                 return [2 /*return*/];
             });
         });
-    };
-    Main.prototype.createLoader = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        Main.loader = new ResourceLoader();
-                        return [4 /*yield*/, this.loadMainResource()];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, this.createMainPackage(["stage", "sprite", "UI"])];
-                    case 2:
-                        _a.sent();
-                        this.temp();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Main.prototype.loadMainResource = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, Main.loader.loadResource("ui", "resource/default.res.json")];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, Main.loader.loadResource("ingame", "resource/default.res.json")];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Main.prototype.loadMainResourceComplete = function () {
-        //this.onProgress(40);
-    };
-    Main.prototype.createMainPackage = function (pkgNames) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (pkgNames.length < 1) {
-                            console.log("패키지 이름을 넣어");
-                            return [2 /*return*/];
-                        }
-                        return [4 /*yield*/, pkgNames.forEach(function (pkg) { Main.loader.createPackage(pkg); })];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Main.prototype.temp = function () {
-        // this.scaleX *= 2;
-        // this.scaleY *= 2;
-        Main.stage = new Stage(Main.loader.createObj("stage", "stage1").asCom);
-        this.addChild(Main.stage);
-        Main.stage.onStart();
-        Main.hito = new Character(Main.loader.createObj("sprite", "hito").asCom);
-        Main.stage.addChild(Main.hito);
-        Main.hito.onStart();
-        this.addChild(Main.loader.createObj("UI", "inven").asCom.displayObject);
-    };
-    Main.prototype.onProgress = function (current) {
-        //this.txtLoading.text = `Loading...${current}/${total}`;
     };
     return Main;
 }(egret.DisplayObjectContainer));
