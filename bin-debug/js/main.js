@@ -343,8 +343,17 @@ var Character = /** @class */ (function (_super_1) {
             }
         });
     };
+    Character.prototype.isCollision = function (obj1, obj2) {
+        var rect1 = obj1.getBounds();
+        var rect2 = obj2.getBounds();
+        rect1.x = obj1.x;
+        rect1.y = obj1.y;
+        rect2.x = obj2.x;
+        rect2.y = obj2.y;
+        return rect1.intersects(rect2);
+    };
     return Character;
-}(egret.Sprite));
+}(egret.DisplayObjectContainer));
 window["Character"] = Character;
 __reflect(Character.prototype,"Character",[]); 
 
@@ -361,6 +370,7 @@ __webpack_require__("./src/Platform.ts");
 __webpack_require__("./src/ResourceLoader.ts");
 __webpack_require__("./src/SceneManager.ts");
 __webpack_require__("./src/Stage.ts");
+__webpack_require__("./src/UI.ts");
 var Main = /** @class */ (function (_super_1) {
     __extends(Main, _super_1);
     function Main() {
@@ -395,6 +405,8 @@ var PangGlobal = /** @class */ (function () {
     PangGlobal.grpNames = ["ingame", "ui"]; // 로드할 그룹 이름들 다 넣어요
     PangGlobal.pkgNames = ["stage", "sprite", "UI"]; // 리소스 패키지 이름들 다 넣어요
     PangGlobal.interpol = 8; // 캐릭터 보간
+    PangGlobal.gWidth = 640;
+    PangGlobal.gHeight = 480;
     return PangGlobal;
 }());
 window["PangGlobal"] = PangGlobal;
@@ -440,42 +452,6 @@ if (!window.platform) {
 var ResourceLoader = /** @class */ (function () {
     function ResourceLoader() {
     }
-    ResourceLoader.prototype.createPackage = function (pkgName) {
-        fairygui.UIPackage.addPackage(pkgName);
-        console.log("Package Created!! " + pkgName);
-    };
-    ResourceLoader.prototype.createObj = function (pkgName, objName) {
-        var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
-        fairygui.GRoot.inst.addChild(obj);
-        console.log("Object Created!! " + objName);
-        return obj;
-    };
-    ResourceLoader.prototype.loadResource = function (key, path) {
-        return __awaiter(this, void 0, void 0, function () {
-            var e_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
-                        return [4 /*yield*/, RES.loadConfig(path, "resource/")];
-                    case 1:
-                        //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
-                        _a.sent();
-                        return [4 /*yield*/, RES.loadGroup(key, 0)];
-                    case 2:
-                        _a.sent();
-                        console.log("Load Complete!! [" + path + "]" + key);
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_1 = _a.sent();
-                        console.error(e_1);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
     ResourceLoader.prototype.loadMainResource = function (grpNames, path) {
         return __awaiter(this, void 0, void 0, function () {
             var _i, grpNames_1, grp;
@@ -522,6 +498,42 @@ var ResourceLoader = /** @class */ (function () {
             });
         });
     };
+    ResourceLoader.prototype.loadResource = function (key, path) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
+                        return [4 /*yield*/, RES.loadConfig(path, "resource/")];
+                    case 1:
+                        //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
+                        _a.sent();
+                        return [4 /*yield*/, RES.loadGroup(key, 0)];
+                    case 2:
+                        _a.sent();
+                        console.log("Load Complete!! [" + path + "]" + key);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_1 = _a.sent();
+                        console.error(e_1);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ResourceLoader.prototype.createPackage = function (pkgName) {
+        fairygui.UIPackage.addPackage(pkgName);
+        console.log("Package Created!! " + pkgName);
+    };
+    ResourceLoader.prototype.createObj = function (pkgName, objName) {
+        var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
+        fairygui.GRoot.inst.addChild(obj);
+        console.log("Object Created!! " + objName);
+        return obj;
+    };
     return ResourceLoader;
 }());
 window["ResourceLoader"] = ResourceLoader;
@@ -558,6 +570,8 @@ var SceneManager = /** @class */ (function () {
                         SceneManager.stage = new Stage(this.loader.createObj("stage", "stage1").asCom);
                         SceneManager.mainScene.addChild(SceneManager.stage);
                         SceneManager.stage.onStart();
+                        SceneManager.ui = new UI(this.loader.createObj("UI", "lobby").asCom);
+                        SceneManager.mainScene.addChild(SceneManager.ui);
                         SceneManager.player = new Character(this.loader.createObj("sprite", "hito").asCom);
                         SceneManager.stage.addChild(SceneManager.player);
                         SceneManager.player.onStart();
@@ -599,8 +613,8 @@ var Stage = /** @class */ (function (_super_1) {
         var groups = this.field.getChild("blocked").asGroup;
         for (var i = 0; i < this.field.numChildren; i++) {
             if (this.field.getChildAt(i).group == groups) {
-                for (var j = -18; j < 19; j++) {
-                    for (var k = -24; k < 9; k++) {
+                for (var j = -(PangGlobal.interpol * 2); j < (PangGlobal.interpol * 2 + 1); j++) {
+                    for (var k = -(PangGlobal.interpol * 3); k < (PangGlobal.interpol - 1); k++) {
                         this.blocked.add((this.field.getChildAt(i).x + j) + "," + (this.field.getChildAt(i).y + k));
                     }
                 }
@@ -611,6 +625,33 @@ var Stage = /** @class */ (function (_super_1) {
 }(egret.Stage));
 window["Stage"] = Stage;
 __reflect(Stage.prototype,"Stage",[]); 
+
+
+/***/ }),
+
+/***/ "./src/UI.ts":
+/***/ (function(module, exports) {
+
+var UI = /** @class */ (function (_super_1) {
+    __extends(UI, _super_1);
+    function UI(u) {
+        var _this = _super_1.call(this) || this;
+        _this.mainUI = u;
+        _this.addChild(_this.mainUI.displayObject);
+        _this.addBtnEvent();
+        return _this;
+    }
+    UI.prototype.addBtnEvent = function () {
+        this.btnInven = this.mainUI.getChild("btn_inven").asButton;
+        this.btnInven.addClickListener(this.openInven, this);
+    };
+    UI.prototype.openInven = function () {
+        alert("!!");
+    };
+    return UI;
+}(egret.DisplayObjectContainer));
+window["UI"] = UI;
+__reflect(UI.prototype,"UI",[]); 
 
 
 /***/ })

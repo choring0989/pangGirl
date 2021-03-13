@@ -21,8 +21,8 @@ class Stage extends egret.Stage {
 
         for (let i = 0; i < this.field.numChildren; i++) {
             if (this.field.getChildAt(i).group == groups) {
-                for (let j = -18; j < 19; j++) {
-                    for (let k = -24; k < 9; k++) {
+                for (let j = -(PangGlobal.interpol * 2); j < (PangGlobal.interpol * 2 + 1); j++) {
+                    for (let k = -(PangGlobal.interpol * 3); k < (PangGlobal.interpol - 1); k++) {
                         this.blocked.add((this.field.getChildAt(i).x + j) + "," + (this.field.getChildAt(i).y + k));
                     }
                 }

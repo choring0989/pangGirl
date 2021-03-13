@@ -39,42 +39,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var ResourceLoader = (function () {
     function ResourceLoader() {
     }
-    ResourceLoader.prototype.createPackage = function (pkgName) {
-        fairygui.UIPackage.addPackage(pkgName);
-        console.log("Package Created!! " + pkgName);
-    };
-    ResourceLoader.prototype.createObj = function (pkgName, objName) {
-        var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
-        fairygui.GRoot.inst.addChild(obj);
-        console.log("Object Created!! " + objName);
-        return obj;
-    };
-    ResourceLoader.prototype.loadResource = function (key, path) {
-        return __awaiter(this, void 0, void 0, function () {
-            var e_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
-                        return [4 /*yield*/, RES.loadConfig(path, "resource/")];
-                    case 1:
-                        //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
-                        _a.sent();
-                        return [4 /*yield*/, RES.loadGroup(key, 0)];
-                    case 2:
-                        _a.sent();
-                        console.log("Load Complete!! [" + path + "]" + key);
-                        return [3 /*break*/, 4];
-                    case 3:
-                        e_1 = _a.sent();
-                        console.error(e_1);
-                        return [3 /*break*/, 4];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
     ResourceLoader.prototype.loadMainResource = function (grpNames, path) {
         return __awaiter(this, void 0, void 0, function () {
             var _i, grpNames_1, grp;
@@ -120,6 +84,42 @@ var ResourceLoader = (function () {
                 }
             });
         });
+    };
+    ResourceLoader.prototype.loadResource = function (key, path) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
+                        return [4 /*yield*/, RES.loadConfig(path, "resource/")];
+                    case 1:
+                        //RES.addEventListener(egret.ProgressEvent.PROGRESS, this.onProgress, this);
+                        _a.sent();
+                        return [4 /*yield*/, RES.loadGroup(key, 0)];
+                    case 2:
+                        _a.sent();
+                        console.log("Load Complete!! [" + path + "]" + key);
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_1 = _a.sent();
+                        console.error(e_1);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ResourceLoader.prototype.createPackage = function (pkgName) {
+        fairygui.UIPackage.addPackage(pkgName);
+        console.log("Package Created!! " + pkgName);
+    };
+    ResourceLoader.prototype.createObj = function (pkgName, objName) {
+        var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
+        fairygui.GRoot.inst.addChild(obj);
+        console.log("Object Created!! " + objName);
+        return obj;
     };
     return ResourceLoader;
 }());

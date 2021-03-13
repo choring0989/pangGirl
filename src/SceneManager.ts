@@ -2,6 +2,7 @@ class SceneManager {
     public static mainScene: Main;
     public static stage: Stage;
     public static player: Character;
+    public static ui: UI;
 
     private loader: ResourceLoader;
 
@@ -26,11 +27,12 @@ class SceneManager {
         SceneManager.mainScene.addChild(SceneManager.stage);
         SceneManager.stage.onStart();
 
+        SceneManager.ui = new UI(this.loader.createObj("UI", "lobby").asCom);
+        SceneManager.mainScene.addChild(SceneManager.ui);
+
         SceneManager.player = new Character(this.loader.createObj("sprite", "hito").asCom);
         SceneManager.stage.addChild(SceneManager.player);
         SceneManager.player.onStart();
-
-        //this.addChild(SceneManager.loader.createObj("UI", "inven").asCom.displayObject);
     }
 
     public onProgress(current: number): void {
