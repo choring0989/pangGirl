@@ -451,6 +451,7 @@ if (!window.platform) {
 
 var ResourceLoader = /** @class */ (function () {
     function ResourceLoader() {
+        egret.MainContext.instance.stage.addChild(fairygui.GRoot.inst.displayObject);
     }
     ResourceLoader.prototype.loadMainResource = function (grpNames, path) {
         return __awaiter(this, void 0, void 0, function () {
@@ -554,25 +555,25 @@ var SceneManager = /** @class */ (function () {
         this.createInitScene();
     };
     SceneManager.prototype.createLoader = function () {
-        if (!this.loader)
-            this.loader = new ResourceLoader();
+        if (!SceneManager.loader)
+            SceneManager.loader = new ResourceLoader();
     };
     SceneManager.prototype.createInitScene = function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.loader.loadMainResource(PangGlobal.grpNames, PangGlobal.defaultResouceJson)];
+                    case 0: return [4 /*yield*/, SceneManager.loader.loadMainResource(PangGlobal.grpNames, PangGlobal.defaultResouceJson)];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.loader.createMainPackage(PangGlobal.pkgNames)];
+                        return [4 /*yield*/, SceneManager.loader.createMainPackage(PangGlobal.pkgNames)];
                     case 2:
                         _a.sent();
-                        SceneManager.stage = new Stage(this.loader.createObj("stage", "stage1").asCom);
+                        SceneManager.stage = new Stage(SceneManager.loader.createObj("stage", "stage1").asCom);
                         SceneManager.mainScene.addChild(SceneManager.stage);
                         SceneManager.stage.onStart();
-                        SceneManager.ui = new UI(this.loader.createObj("UI", "lobby").asCom);
+                        SceneManager.ui = new UI(SceneManager.loader.createObj("UI", "lobby").asCom);
                         SceneManager.mainScene.addChild(SceneManager.ui);
-                        SceneManager.player = new Character(this.loader.createObj("sprite", "hito").asCom);
+                        SceneManager.player = new Character(SceneManager.loader.createObj("sprite", "hito").asCom);
                         SceneManager.stage.addChild(SceneManager.player);
                         SceneManager.player.onStart();
                         return [2 /*return*/];
@@ -645,8 +646,40 @@ var UI = /** @class */ (function (_super_1) {
         this.btnInven = this.mainUI.getChild("btn_inven").asButton;
         this.btnInven.addClickListener(this.openInven, this);
     };
+    UI.prototype.createInven = function () {
+        this.inven = SceneManager.loader.createObj("UI", "inven").asCom;
+        this.inven.getChild("btn_close").asCom.addClickListener(this.closeInven, this);
+    };
     UI.prototype.openInven = function () {
-        alert("!!");
+        if (!this.inven)
+            this.createInven();
+        this.show(this.mainUI, this.inven);
+    };
+    UI.prototype.closeInven = function () {
+        this.hide(this.inven);
+    };
+    UI.prototype.show = function (parent, child) {
+        try {
+            if (parent && child) {
+                this.dim = new fairygui.GGraph();
+                this.dim.setSize(PangGlobal.gWidth, PangGlobal.gHeight);
+                this.dim.drawRect(0, 0x000000, 0.5, 0x000000, 0.5);
+                parent.addChild(this.dim);
+                parent.addChild(child);
+                child.visible = true;
+            }
+        }
+        catch (e) { }
+    };
+    UI.prototype.hide = function (child, isDestroy) {
+        if (isDestroy === void 0) { isDestroy = false; }
+        try {
+            if (this.dim && this.dim.parent)
+                this.dim.removeFromParent();
+            if (child && child.parent)
+                isDestroy ? child.removeFromParent() : child.visible = false;
+        }
+        catch (e) { }
     };
     return UI;
 }(egret.DisplayObjectContainer));

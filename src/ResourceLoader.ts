@@ -1,7 +1,7 @@
 class ResourceLoader {
 
     public constructor() {
-
+        egret.MainContext.instance.stage.addChild(fairygui.GRoot.inst.displayObject);
     }
 
     public async loadMainResource(grpNames: Array<string>, path: string) {

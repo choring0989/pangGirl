@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var ResourceLoader = (function () {
     function ResourceLoader() {
+        egret.MainContext.instance.stage.addChild(fairygui.GRoot.inst.displayObject);
     }
     ResourceLoader.prototype.loadMainResource = function (grpNames, path) {
         return __awaiter(this, void 0, void 0, function () {
