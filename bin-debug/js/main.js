@@ -653,38 +653,54 @@ var UI = /** @class */ (function (_super_1) {
     UI.prototype.openInven = function () {
         if (!this.inven)
             this.createInven();
-        this.show(this.mainUI, this.inven);
+        PopupManager.show(this.mainUI, this.inven);
     };
     UI.prototype.closeInven = function () {
-        this.hide(this.inven);
+        PopupManager.hide(this.inven);
     };
-    UI.prototype.show = function (parent, child) {
+    return UI;
+}(egret.DisplayObjectContainer));
+window["UI"] = UI;
+__reflect(UI.prototype,"UI",[]); 
+var PopupManager = /** @class */ (function () {
+    function PopupManager() {
+    }
+    PopupManager.show = function (parent, child) {
+        var pm = new PopupManager();
+        pm.show(parent, child);
+    };
+    PopupManager.prototype.show = function (parent, child) {
         try {
             if (parent && child) {
-                this.dim = new fairygui.GGraph();
-                this.dim.setSize(PangGlobal.gWidth, PangGlobal.gHeight);
-                this.dim.drawRect(0, 0x000000, 0.5, 0x000000, 0.5);
-                parent.addChild(this.dim);
+                PopupManager.dim = new fairygui.GGraph();
+                PopupManager.dim.setSize(PangGlobal.gWidth, PangGlobal.gHeight);
+                PopupManager.dim.drawRect(0, 0x000000, 0.5, 0x000000, 0.5);
+                parent.addChild(PopupManager.dim);
                 parent.addChild(child);
                 child.visible = true;
             }
         }
         catch (e) { }
     };
-    UI.prototype.hide = function (child, isDestroy) {
+    PopupManager.hide = function (child, isDestroy) {
+        if (isDestroy === void 0) { isDestroy = false; }
+        var pm = new PopupManager();
+        pm.hide(child, isDestroy);
+    };
+    PopupManager.prototype.hide = function (child, isDestroy) {
         if (isDestroy === void 0) { isDestroy = false; }
         try {
-            if (this.dim && this.dim.parent)
-                this.dim.removeFromParent();
+            if (PopupManager.dim && PopupManager.dim.parent)
+                PopupManager.dim.removeFromParent();
             if (child && child.parent)
                 isDestroy ? child.removeFromParent() : child.visible = false;
         }
         catch (e) { }
     };
-    return UI;
-}(egret.DisplayObjectContainer));
-window["UI"] = UI;
-__reflect(UI.prototype,"UI",[]); 
+    return PopupManager;
+}());
+window["PopupManager"] = PopupManager;
+__reflect(PopupManager.prototype,"PopupManager",[]); 
 
 
 /***/ })

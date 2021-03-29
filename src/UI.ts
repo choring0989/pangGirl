@@ -23,32 +23,41 @@ class UI extends egret.DisplayObjectContainer {
 
     public openInven() {
         if (!this.inven) this.createInven();
-        this.show(this.mainUI, this.inven);
+        PopupManager.show(this.mainUI, this.inven);
     }
 
-    public closeInven(){
-        this.hide(this.inven);
+    public closeInven() {
+        PopupManager.hide(this.inven);
     }
+}
 
-    /** 나중에 따로 빼서 클래스 만들기 */
-    private dim: fairygui.GGraph;
+class PopupManager {
+    public static dim: fairygui.GGraph;
 
+    public static show(parent: fairygui.GComponent, child: fairygui.GComponent) {
+        let pm = new PopupManager();
+        pm.show(parent, child);
+    }
     public show(parent: fairygui.GComponent, child: fairygui.GComponent) {
         try {
             if (parent && child) {
-                this.dim = new fairygui.GGraph();
-                this.dim.setSize(PangGlobal.gWidth, PangGlobal.gHeight);
-                this.dim.drawRect(0, 0x000000, 0.5, 0x000000, 0.5);
-                parent.addChild(this.dim);
+                PopupManager.dim = new fairygui.GGraph();
+                PopupManager.dim.setSize(PangGlobal.gWidth, PangGlobal.gHeight);
+                PopupManager.dim.drawRect(0, 0x000000, 0.5, 0x000000, 0.5);
+                parent.addChild(PopupManager.dim);
                 parent.addChild(child);
                 child.visible = true;
             }
         } catch (e) { }
     }
 
+    public static hide(child: fairygui.GComponent, isDestroy: boolean = false) {
+        let pm = new PopupManager();
+        pm.hide(child, isDestroy);
+    }
     public hide(child: fairygui.GComponent, isDestroy: boolean = false) {
         try {
-            if (this.dim && this.dim.parent) this.dim.removeFromParent();
+            if (PopupManager.dim && PopupManager.dim.parent) PopupManager.dim.removeFromParent();
             if (child && child.parent) isDestroy ? child.removeFromParent() : child.visible = false;
         } catch (e) { }
     }
