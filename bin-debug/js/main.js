@@ -404,9 +404,9 @@ var PangGlobal = /** @class */ (function () {
     PangGlobal.defaultResouceJson = "resource/default.res.json";
     PangGlobal.grpNames = ["ingame", "ui"]; // 로드할 그룹 이름들 다 넣어요
     PangGlobal.pkgNames = ["stage", "sprite", "UI"]; // 리소스 패키지 이름들 다 넣어요
-    PangGlobal.interpol = 8; // 캐릭터 보간
-    PangGlobal.gWidth = 640;
-    PangGlobal.gHeight = 480;
+    PangGlobal.interpol = 16; // 캐릭터 보간
+    PangGlobal.gWidth = 750;
+    PangGlobal.gHeight = 1334;
     return PangGlobal;
 }());
 window["PangGlobal"] = PangGlobal;
@@ -665,17 +665,25 @@ __reflect(UI.prototype,"UI",[]);
 var PopupManager = /** @class */ (function () {
     function PopupManager() {
     }
+    Object.defineProperty(PopupManager, "ME", {
+        get: function () {
+            if (!this.instance)
+                this.instance = new PopupManager();
+            return this.instance;
+        },
+        enumerable: false,
+        configurable: true
+    });
     PopupManager.show = function (parent, child) {
-        var pm = new PopupManager();
-        pm.show(parent, child);
+        PopupManager.ME.show(parent, child);
     };
     PopupManager.prototype.show = function (parent, child) {
         try {
             if (parent && child) {
-                PopupManager.dim = new fairygui.GGraph();
-                PopupManager.dim.setSize(PangGlobal.gWidth, PangGlobal.gHeight);
-                PopupManager.dim.drawRect(0, 0x000000, 0.5, 0x000000, 0.5);
-                parent.addChild(PopupManager.dim);
+                PopupManager.ME.dim = new fairygui.GGraph();
+                PopupManager.ME.dim.setSize(PangGlobal.gWidth, PangGlobal.gHeight);
+                PopupManager.ME.dim.drawRect(0, 0x000000, 0.5, 0x000000, 0.5);
+                parent.addChild(PopupManager.ME.dim);
                 parent.addChild(child);
                 child.visible = true;
             }
@@ -684,14 +692,13 @@ var PopupManager = /** @class */ (function () {
     };
     PopupManager.hide = function (child, isDestroy) {
         if (isDestroy === void 0) { isDestroy = false; }
-        var pm = new PopupManager();
-        pm.hide(child, isDestroy);
+        PopupManager.ME.hide(child, isDestroy);
     };
     PopupManager.prototype.hide = function (child, isDestroy) {
         if (isDestroy === void 0) { isDestroy = false; }
         try {
-            if (PopupManager.dim && PopupManager.dim.parent)
-                PopupManager.dim.removeFromParent();
+            if (PopupManager.ME.dim && PopupManager.ME.dim.parent)
+                PopupManager.ME.dim.removeFromParent();
             if (child && child.parent)
                 isDestroy ? child.removeFromParent() : child.visible = false;
         }

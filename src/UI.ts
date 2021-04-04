@@ -32,19 +32,24 @@ class UI extends egret.DisplayObjectContainer {
 }
 
 class PopupManager {
-    public static dim: fairygui.GGraph;
+    private static instance: PopupManager;
+    private dim: fairygui.GGraph;
+
+    public static get ME() {
+        if (!this.instance) this.instance = new PopupManager();
+        return this.instance;
+    }
 
     public static show(parent: fairygui.GComponent, child: fairygui.GComponent) {
-        let pm = new PopupManager();
-        pm.show(parent, child);
+        PopupManager.ME.show(parent, child);
     }
-    public show(parent: fairygui.GComponent, child: fairygui.GComponent) {
+    private show(parent: fairygui.GComponent, child: fairygui.GComponent) {
         try {
             if (parent && child) {
-                PopupManager.dim = new fairygui.GGraph();
-                PopupManager.dim.setSize(PangGlobal.gWidth, PangGlobal.gHeight);
-                PopupManager.dim.drawRect(0, 0x000000, 0.5, 0x000000, 0.5);
-                parent.addChild(PopupManager.dim);
+                PopupManager.ME.dim = new fairygui.GGraph();
+                PopupManager.ME.dim.setSize(PangGlobal.gWidth, PangGlobal.gHeight);
+                PopupManager.ME.dim.drawRect(0, 0x000000, 0.5, 0x000000, 0.5);
+                parent.addChild(PopupManager.ME.dim);
                 parent.addChild(child);
                 child.visible = true;
             }
@@ -52,12 +57,11 @@ class PopupManager {
     }
 
     public static hide(child: fairygui.GComponent, isDestroy: boolean = false) {
-        let pm = new PopupManager();
-        pm.hide(child, isDestroy);
+        PopupManager.ME.hide(child, isDestroy);
     }
-    public hide(child: fairygui.GComponent, isDestroy: boolean = false) {
+    private hide(child: fairygui.GComponent, isDestroy: boolean = false) {
         try {
-            if (PopupManager.dim && PopupManager.dim.parent) PopupManager.dim.removeFromParent();
+            if (PopupManager.ME.dim && PopupManager.ME.dim.parent) PopupManager.ME.dim.removeFromParent();
             if (child && child.parent) isDestroy ? child.removeFromParent() : child.visible = false;
         } catch (e) { }
     }
