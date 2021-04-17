@@ -31,7 +31,11 @@
     {
       "name": "rawinflate",
       "path": "./libs/modules_ex/rawinflate"
-    }
+    },
+		{
+			"name": "tiled",
+			"path": "./libs/modules_ex/tiled"
+		}
   ],
   "vivo": {
     "usePlugin": true
