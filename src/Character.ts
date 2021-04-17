@@ -12,26 +12,26 @@ class Character extends egret.DisplayObjectContainer {
 
     private initialize() {
         this.addChild(this.human.asCom.displayObject);
-        this.human.x = 150;
-        this.human.y = 150;
+        this.human.x = PangGlobal.gWidth / 2;
+        this.human.y = PangGlobal.gHeight / 2;
 
         window.addEventListener("keydown", (e) => {
-            if (e.keyCode == 37 && this.human.x > 0) {
+            if (e.keyCode == 37 && this.human.x > PangGlobal.sPositionX) {
                 this.human.getController("c1").selectedPage = "left";
                 if (SceneManager.stage.blocked.has((this.human.x - PangGlobal.interpol) + "," + this.human.y)) return;
                 this.human.x -= PangGlobal.interpol;
             }
-            if (e.keyCode == 38 && this.human.y > 0) {
+            if (e.keyCode == 38 && this.human.y > PangGlobal.sPositionY) {
                 this.human.getController("c1").selectedPage = "back";
                 if (SceneManager.stage.blocked.has(this.human.x + "," + (this.human.y - PangGlobal.interpol))) return;
                 this.human.y -= PangGlobal.interpol;
             }
-            if (e.keyCode == 39 && this.human.x < (SceneManager.stage.field.width - PangGlobal.interpol * 4)) {
+            if (e.keyCode == 39 && this.human.x < (PangGlobal.sWidth + PangGlobal.sPositionX - PangGlobal.interpol * 4)) {
                 this.human.getController("c1").selectedPage = "right";
                 if (SceneManager.stage.blocked.has((this.human.x + PangGlobal.interpol) + "," + this.human.y)) return;
                 this.human.x += PangGlobal.interpol;
             }
-            if (e.keyCode == 40 && this.human.y < (SceneManager.stage.field.height - PangGlobal.interpol * 4)) {
+            if (e.keyCode == 40 && this.human.y < (PangGlobal.sHeight + PangGlobal.sPositionY - PangGlobal.interpol * 4)) {
                 this.human.getController("c1").selectedPage = "front";
                 if (SceneManager.stage.blocked.has(this.human.x + "," + (this.human.y + PangGlobal.interpol))) return;
                 this.human.y += PangGlobal.interpol;

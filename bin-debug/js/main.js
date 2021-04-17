@@ -314,28 +314,28 @@ var Character = /** @class */ (function (_super_1) {
     Character.prototype.initialize = function () {
         var _this = this;
         this.addChild(this.human.asCom.displayObject);
-        this.human.x = 150;
-        this.human.y = 150;
+        this.human.x = PangGlobal.gWidth / 2;
+        this.human.y = PangGlobal.gHeight / 2;
         window.addEventListener("keydown", function (e) {
-            if (e.keyCode == 37 && _this.human.x > 0) {
+            if (e.keyCode == 37 && _this.human.x > PangGlobal.sPositionX) {
                 _this.human.getController("c1").selectedPage = "left";
                 if (SceneManager.stage.blocked.has((_this.human.x - PangGlobal.interpol) + "," + _this.human.y))
                     return;
                 _this.human.x -= PangGlobal.interpol;
             }
-            if (e.keyCode == 38 && _this.human.y > 0) {
+            if (e.keyCode == 38 && _this.human.y > PangGlobal.sPositionY) {
                 _this.human.getController("c1").selectedPage = "back";
                 if (SceneManager.stage.blocked.has(_this.human.x + "," + (_this.human.y - PangGlobal.interpol)))
                     return;
                 _this.human.y -= PangGlobal.interpol;
             }
-            if (e.keyCode == 39 && _this.human.x < (SceneManager.stage.field.width - PangGlobal.interpol * 4)) {
+            if (e.keyCode == 39 && _this.human.x < (PangGlobal.sWidth + PangGlobal.sPositionX - PangGlobal.interpol * 4)) {
                 _this.human.getController("c1").selectedPage = "right";
                 if (SceneManager.stage.blocked.has((_this.human.x + PangGlobal.interpol) + "," + _this.human.y))
                     return;
                 _this.human.x += PangGlobal.interpol;
             }
-            if (e.keyCode == 40 && _this.human.y < (SceneManager.stage.field.height - PangGlobal.interpol * 4)) {
+            if (e.keyCode == 40 && _this.human.y < (PangGlobal.sHeight + PangGlobal.sPositionY - PangGlobal.interpol * 4)) {
                 _this.human.getController("c1").selectedPage = "front";
                 if (SceneManager.stage.blocked.has(_this.human.x + "," + (_this.human.y + PangGlobal.interpol)))
                     return;
@@ -404,9 +404,15 @@ var PangGlobal = /** @class */ (function () {
     PangGlobal.defaultResouceJson = "resource/default.res.json";
     PangGlobal.grpNames = ["ingame", "ui"]; // 로드할 그룹 이름들 다 넣어요
     PangGlobal.pkgNames = ["stage", "sprite", "UI"]; // 리소스 패키지 이름들 다 넣어요
+    // 게임 UI 설정값
     PangGlobal.interpol = 16; // 캐릭터 보간
     PangGlobal.gWidth = 750;
     PangGlobal.gHeight = 1334;
+    // 스테이지 포지션 관련 값
+    PangGlobal.sPositionX = 0;
+    PangGlobal.sPositionY = 92;
+    PangGlobal.sWidth = 750;
+    PangGlobal.sHeight = 1092;
     return PangGlobal;
 }());
 window["PangGlobal"] = PangGlobal;
