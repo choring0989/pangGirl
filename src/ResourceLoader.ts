@@ -1,5 +1,6 @@
 class ResourceLoader {
-
+    public tiles = {};
+    
     public constructor() {
         egret.MainContext.instance.stage.addChild(fairygui.GRoot.inst.displayObject);
     }
@@ -25,16 +26,42 @@ class ResourceLoader {
         }
     }
 
-    public createPackage(pkgName) {
+    public createPackage(pkgName: string) {
         fairygui.UIPackage.addPackage(pkgName);
         console.log("Package Created!! " + pkgName);
     }
 
-    public createObj(pkgName, objName): fairygui.GObject {
-        let obj: fgui.GComponent = fairygui.UIPackage.createObject(pkgName, objName).asCom;
-        fairygui.GRoot.inst.addChild(obj);
-        console.log("Object Created!! " + objName);
-        return obj;
+    public createObj(pkgName: string, objName: string): fairygui.GObject {
+        if (pkgName == "TMX") {
+            if (!this.tiles[objName]) return null;
+            console.log("TMX Created!! " + objName);
+            return this.tiles[objName];
+        } else {
+            let obj: fgui.GComponent = fairygui.UIPackage.createObject(pkgName, objName).asCom;
+            fairygui.GRoot.inst.addChild(obj);
+            console.log("Object Created!! " + objName);
+            return obj;
+        }
+    }
+
+    public async loadMapResource(mapName: string) {
+        let tmxMap: tiled.TMXTilemap;
+        let urlLoader: egret.URLLoader = new egret.URLLoader();
+
+        urlLoader.dataFormat = egret.URLLoaderDataFormat.TEXT;
+        let path = PangGlobal.urlTML + mapName + ".tmx";
+
+        let that = this;
+        return new Promise((resolve, reject) => {
+            urlLoader.addEventListener(egret.Event.COMPLETE, function (event: egret.Event): void {
+                let data: any = egret.XML.parse(event.target.data);
+                tmxMap = new tiled.TMXTilemap(PangGlobal.sWidth, PangGlobal.sHeight, data, path);
+                tmxMap.render();
+                that.tiles[mapName] = tmxMap;
+                resolve(tmxMap); //리턴함
+            }, path);
+            urlLoader.load(new egret.URLRequest(path));
+        })
     }
 
 }

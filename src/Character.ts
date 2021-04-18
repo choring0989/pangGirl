@@ -12,8 +12,8 @@ class Character extends egret.DisplayObjectContainer {
 
     private initialize() {
         this.addChild(this.human.asCom.displayObject);
-        this.human.x = PangGlobal.gWidth / 2;
-        this.human.y = PangGlobal.gHeight / 2;
+        this.human.x = 150;//PangGlobal.gWidth / 2;
+        this.human.y = 150;//PangGlobal.gHeight / 2;
 
         window.addEventListener("keydown", (e) => {
             if (e.keyCode == 37 && this.human.x > PangGlobal.sPositionX) {
@@ -40,8 +40,8 @@ class Character extends egret.DisplayObjectContainer {
     }
 
     private isCollision(obj1: egret.DisplayObject, obj2: egret.DisplayObject): boolean {
-        var rect1: egret.Rectangle = obj1.getBounds();
-        var rect2: egret.Rectangle = obj2.getBounds();
+        let rect1: egret.Rectangle = obj1.getBounds();
+        let rect2: egret.Rectangle = obj2.getBounds();
         rect1.x = obj1.x;
         rect1.y = obj1.y;
         rect2.x = obj2.x;
