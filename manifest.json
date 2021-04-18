@@ -8,7 +8,8 @@
 		"libs/modules/tween/tween.js",
 		"libs/modules/promise/promise.js",
 		"libs/modules_ex/fairygui/fairygui.js",
-		"libs/modules_ex/rawinflate/rawinflate.js"
+		"libs/modules_ex/rawinflate/rawinflate.js",
+		"libs/modules_ex/tiled/tiled.js"
 	],
 	"game": [
 		"bin-debug/Character.js",

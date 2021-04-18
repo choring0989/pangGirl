@@ -38,6 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var ResourceLoader = (function () {
     function ResourceLoader() {
+        this.tiles = {};
         egret.MainContext.instance.stage.addChild(fairygui.GRoot.inst.displayObject);
     }
     ResourceLoader.prototype.loadMainResource = function (grpNames, path) {
@@ -117,10 +118,39 @@ var ResourceLoader = (function () {
         console.log("Package Created!! " + pkgName);
     };
     ResourceLoader.prototype.createObj = function (pkgName, objName) {
-        var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
-        fairygui.GRoot.inst.addChild(obj);
-        console.log("Object Created!! " + objName);
-        return obj;
+        if (pkgName == "TMX") {
+            if (!this.tiles[objName])
+                return null;
+            console.log("TMX Created!! " + objName);
+            return this.tiles[objName];
+        }
+        else {
+            var obj = fairygui.UIPackage.createObject(pkgName, objName).asCom;
+            fairygui.GRoot.inst.addChild(obj);
+            console.log("Object Created!! " + objName);
+            return obj;
+        }
+    };
+    ResourceLoader.prototype.loadMapResource = function (mapName) {
+        return __awaiter(this, void 0, void 0, function () {
+            var tmxMap, urlLoader, path, that;
+            return __generator(this, function (_a) {
+                urlLoader = new egret.URLLoader();
+                urlLoader.dataFormat = egret.URLLoaderDataFormat.TEXT;
+                path = PangGlobal.urlTML + mapName + ".tmx";
+                that = this;
+                return [2 /*return*/, new Promise(function (resolve, reject) {
+                        urlLoader.addEventListener(egret.Event.COMPLETE, function (event) {
+                            var data = egret.XML.parse(event.target.data);
+                            tmxMap = new tiled.TMXTilemap(PangGlobal.sWidth, PangGlobal.sHeight, data, path);
+                            tmxMap.render();
+                            that.tiles[mapName] = tmxMap;
+                            resolve(tmxMap); //리턴함
+                        }, path);
+                        urlLoader.load(new egret.URLRequest(path));
+                    })];
+            });
+        });
     };
     return ResourceLoader;
 }());

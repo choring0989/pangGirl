@@ -21,7 +21,7 @@
 			"useBuildInServer": true,
 			"sourceMaps": true,
 			"webRoot": "${workspaceRoot}",
-			"preLaunchTask":"build",
+			"preLaunchTask":"clean",
 			"userDataDir":"${tmpdir}",
 			"port":5451
 		}
