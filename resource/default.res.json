@@ -5,7 +5,7 @@
 			"name": "ingame"
 		},
 		{
-			"keys": "",
+			"keys": "Building01_png",
 			"name": "preload"
 		},
 		{
@@ -43,6 +43,11 @@
 			"url": "fairy/UI.fui",
 			"type": "bin",
 			"name": "UI"
+		},
+		{
+			"name": "Building01_png",
+			"type": "image",
+			"url": "tmx/Building01.png"
 		}
 	]
 }
