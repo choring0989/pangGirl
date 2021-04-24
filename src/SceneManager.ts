@@ -1,4 +1,5 @@
 class SceneManager {
+    public static dispatcher: egret.EventDispatcher = new egret.EventDispatcher();;
     public static loader: ResourceLoader;
 
     public static mainScene: Main;
@@ -26,7 +27,7 @@ class SceneManager {
 
         SceneManager.stage = new Stage(SceneManager.loader.createObj("TMX", "home"));
         SceneManager.mainScene.addChild(SceneManager.stage.field);
-        // SceneManager.stage.onStart();
+        SceneManager.stage.onStart();
 
         SceneManager.ui = new UI(SceneManager.loader.createObj("UI", "lobby").asCom);
         SceneManager.mainScene.addChild(SceneManager.ui);
