@@ -10,6 +10,7 @@ class UI extends egret.DisplayObjectContainer {
     public constructor(u) {
         super();
         this.mainUI = u;
+
         this.addChild(this.mainUI.displayObject);
         this.addBtnEvent();
     }
@@ -25,7 +26,7 @@ class UI extends egret.DisplayObjectContainer {
         this.btnMinus.addClickListener(this.zoomOutScene, this);
     }
 
-    private setInit(){
+    private setInit() {
         this.txtSceneSize.text = SceneManager.stage.field.scaleX.toString();
     }
 
@@ -43,18 +44,22 @@ class UI extends egret.DisplayObjectContainer {
         PopupManager.hide(this.inven);
     }
 
-    private zoomInScene(){
-        if(SceneManager.stage.field.scaleX == 3) return;
-        SceneManager.stage.field.scaleX += 1;
-        SceneManager.stage.field.scaleY += 1;
-        
+    private zoomInScene() {
+        if (SceneManager.stage.fScale == 3) return;
+        SceneManager.stage.fScale += 1;
+
+        let event = new egret.Event("zoomScale");
+        SceneManager.dispatcher.dispatchEvent(event);
+
         this.setInit();
     }
 
-    private zoomOutScene(){
-        if(SceneManager.stage.field.scaleX == 1) return;
-        SceneManager.stage.field.scaleX -= 1;
-        SceneManager.stage.field.scaleY -= 1;
+    private zoomOutScene() {
+        if (SceneManager.stage.fScale == 1) return;
+        SceneManager.stage.fScale -= 1;
+
+        let event = new egret.Event("zoomScale");
+        SceneManager.dispatcher.dispatchEvent(event);
 
         this.setInit();
     }
