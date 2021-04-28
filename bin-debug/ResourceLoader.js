@@ -155,3 +155,4 @@ var ResourceLoader = (function () {
     return ResourceLoader;
 }());
 __reflect(ResourceLoader.prototype, "ResourceLoader");
+//# sourceMappingURL=ResourceLoader.js.map
