@@ -24,10 +24,9 @@ class Stage extends egret.DisplayObjectContainer {
     }
 
     private setSpon(){
-        // 수정중 ...ㅎ;
-        // let triggers = this.field.getChildByName("trigger").$children;
-        // console.log(triggers);
-        // console.log(SceneManager.stage.field.getChildByName("trigger").$children[0]);
+        let triggers = this.field.getChildByName("trigger").$children;
+        console.log(triggers);
+        console.log(triggers[0]);
     }
 
     private zoomScale(){

@@ -144,8 +144,10 @@ var ResourceLoader = (function () {
                             var data = egret.XML.parse(event.target.data);
                             tmxMap = new tiled.TMXTilemap(PangGlobal.sWidth, PangGlobal.sHeight, data, path);
                             tmxMap.render();
-                            that.tiles[mapName] = tmxMap;
-                            resolve(tmxMap); //리턴함
+                            tmxMap.addEventListener(tiled.TMXImageLoadEvent.ALL_IMAGE_COMPLETE, function () {
+                                that.tiles[mapName] = tmxMap;
+                                resolve(tmxMap);
+                            }, this);
                         }, path);
                         urlLoader.load(new egret.URLRequest(path));
                     })];

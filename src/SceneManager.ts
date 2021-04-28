@@ -27,14 +27,15 @@ class SceneManager {
 
         SceneManager.stage = new Stage(SceneManager.loader.createObj("TMX", "home"));
         SceneManager.mainScene.addChild(SceneManager.stage.field);
-        SceneManager.stage.onStart();
 
         SceneManager.ui = new UI(SceneManager.loader.createObj("UI", "lobby").asCom);
         SceneManager.mainScene.addChild(SceneManager.ui);
 
         SceneManager.player = new Character(SceneManager.loader.createObj("sprite", "hito").asCom);
         SceneManager.stage.field.addChild(SceneManager.player);
+        
         SceneManager.player.onStart();
+        SceneManager.stage.onStart();
     }
 
     public onProgress(current: number): void {
