@@ -23,10 +23,10 @@ class Stage extends egret.DisplayObjectContainer {
         this.setSpon();
     }
 
-    private setSpon(){
-        let triggers = this.field.getChildByName("trigger").$children;
-        console.log(triggers);
-        console.log(triggers[0]);
+    private setSpon() {
+        let sponObj = TmxUtil.getObjectByName(this.field, "trigger", "spon");
+        PangGlobal.cPositionX = sponObj ? sponObj.x : 0;
+        PangGlobal.cPositionY = sponObj ? sponObj.y : 0;
     }
 
     private zoomScale(){

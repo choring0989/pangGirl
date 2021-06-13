@@ -16,6 +16,10 @@ class PangGlobal {
     public static sWidth: number = 1536;
     public static sHeight: number = 1536;
 
+    // 주인공 캐릭터 관련 값
+    public static cPositionX: number = 0; // 캐릭터 초기 x좌표
+    public static cPositionY: number = 0; // 캐릭터 초기 Y좌표
+
     public constructor() {
 
     }

@@ -19,6 +19,7 @@
 		"bin-debug/ResourceLoader.js",
 		"bin-debug/SceneManager.js",
 		"bin-debug/Stage.js",
+		"bin-debug/TmxUtil.js",
 		"bin-debug/UI.js"
 	]
 }

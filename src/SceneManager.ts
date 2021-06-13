@@ -34,8 +34,9 @@ class SceneManager {
         SceneManager.player = new Character(SceneManager.loader.createObj("sprite", "hito").asCom);
         SceneManager.stage.field.addChild(SceneManager.player);
         
-        SceneManager.player.onStart();
+        // 초기 캐릭터 포지션 값 설정 순서때문에...stage -> player
         SceneManager.stage.onStart();
+        SceneManager.player.onStart();
     }
 
     public onProgress(current: number): void {
