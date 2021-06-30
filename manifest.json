@@ -13,6 +13,7 @@
 	],
 	"game": [
 		"bin-debug/Character.js",
+		"bin-debug/Inventory.js",
 		"bin-debug/Main.js",
 		"bin-debug/PangGlobal.js",
 		"bin-debug/Platform.js",

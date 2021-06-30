@@ -1,6 +1,6 @@
 class UI extends egret.DisplayObjectContainer {
     public mainUI: fgui.GComponent;
-    public inven: fgui.GComponent;
+    public inven: Inventory;
 
     private btnInven: fgui.GButton;
     private btnPlus: fgui.GComponent;
@@ -12,6 +12,7 @@ class UI extends egret.DisplayObjectContainer {
         this.mainUI = u;
 
         this.addChild(this.mainUI.displayObject);
+        this.createInven();
         this.addBtnEvent();
     }
 
@@ -21,7 +22,7 @@ class UI extends egret.DisplayObjectContainer {
         this.btnMinus = this.mainUI.getChild("btn_minus").asCom;
         this.txtSceneSize = this.mainUI.getChild("txt_size").asTextField;
 
-        this.btnInven.addClickListener(this.openInven, this);
+        if (this.inven) this.btnInven.addClickListener(this.inven.openInven, this.inven);
         this.btnPlus.addClickListener(this.zoomInScene, this);
         this.btnMinus.addClickListener(this.zoomOutScene, this);
     }
@@ -31,17 +32,7 @@ class UI extends egret.DisplayObjectContainer {
     }
 
     private createInven() {
-        this.inven = SceneManager.loader.createObj("UI", "inven").asCom;
-        this.inven.getChild("btn_close").asCom.addClickListener(this.closeInven, this);
-    }
-
-    public openInven() {
-        if (!this.inven) this.createInven();
-        PopupManager.show(this.mainUI, this.inven);
-    }
-
-    public closeInven() {
-        PopupManager.hide(this.inven);
+        this.inven = new Inventory();
     }
 
     private zoomInScene() {
