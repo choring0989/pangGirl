@@ -65,18 +65,29 @@ class PopupManager {
         return this.instance;
     }
 
-    public static show(parent: fairygui.GComponent, child: fairygui.GComponent) {
-        PopupManager.ME.show(parent, child);
+    /** 딤처리 팝업을 보여주는 메소드
+     * @param {fairygui.GComponent} child 띄울 팝업 컴포넌트
+     * @param {fairygui.GComponent} parent child 컴포넌트를 붙일 부모 컴포넌트, 비워둘 경우 SceneManager.ui.mainUI로 자동 설정
+     */
+    public static show(child: fairygui.GComponent, parent: fairygui.GComponent = null) {
+        PopupManager.ME.show(child, parent);
     }
-    private show(parent: fairygui.GComponent, child: fairygui.GComponent) {
+    private show(child: fairygui.GComponent, parent: fairygui.GComponent = null) {
         try {
-            if (parent && child) {
+            if (child) {
                 PopupManager.ME.dim = new fairygui.GGraph();
                 PopupManager.ME.dim.setSize(PangGlobal.gWidth, PangGlobal.gHeight);
                 PopupManager.ME.dim.drawRect(0, 0x000000, 0.5, 0x000000, 0.5);
-                parent.addChild(PopupManager.ME.dim);
-                parent.addChild(child);
+                if (parent) {
+                    parent.addChild(PopupManager.ME.dim);
+                    parent.addChild(child);
+                } else {
+                    SceneManager.ui.mainUI.addChild(PopupManager.ME.dim);
+                    SceneManager.ui.mainUI.addChild(child);
+                }
                 child.visible = true;
+            } else {
+                console.log("child is null!! PopupManager.show");
             }
         } catch (e) { }
     }
