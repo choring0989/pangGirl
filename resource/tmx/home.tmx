@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="64" tileheight="64" infinite="0" nextlayerid="6" nextobjectid="15">
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="64" tileheight="64" infinite="0" nextlayerid="8" nextobjectid="17">
  <tileset firstgid="1" name="TileGrassPath_32x32" tilewidth="64" tileheight="64" tilecount="64" columns="8">
   <image source="TileGrassPath_32x32.png" width="512" height="512"/>
  </tileset>
@@ -62,7 +62,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="3" name="obj" width="24" height="24">
+ <layer id="3" name="home" width="24" height="24">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,65,66,67,68,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -91,7 +91,8 @@
 </data>
  </layer>
  <objectgroup id="5" name="trigger" tintcolor="#55ffff">
-  <object id="9" name="spon" x="448" y="512" width="64" height="64" visible="0"/>
-  <object id="12" name="test" x="576" y="512" width="64" height="64" visible="0"/>
+  <object id="9" name="spawn" x="448" y="512" width="64" height="64" visible="0"/>
+  <object id="12" name="entrance" x="521" y="300" width="73.5" height="84" visible="0"/>
+  <object id="16" name="roof" type="block" x="448" y="127.333" width="254.667" height="168.667" visible="0"/>
  </objectgroup>
 </map>

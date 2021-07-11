@@ -12,11 +12,20 @@ class TmxUtil {
         let layer = tiledMap.getChildByName(objLayerName).$children;
 
         layer.forEach(tmxObj => {
-            if (tmxObj.name == objName) {
-                findObj = tmxObj;
-            }
+            if (tmxObj.name == objName) findObj = tmxObj;
         });
+        return findObj;
+    }
 
+    public static getObjectArrayByType(tiledMap: tiled.TMXTilemap, objLayerName: string, objType: string): egret.DisplayObject[] {
+        if (!tiledMap) return undefined;
+
+        let findObj: egret.DisplayObject[] = new Array<egret.DisplayObject>();
+        let layer = tiledMap.getChildByName(objLayerName).$children;
+
+        layer.forEach(tmxObj => {
+            if (tmxObj['type'] == objType) findObj.push(tmxObj);
+        });
         return findObj;
     }
 }

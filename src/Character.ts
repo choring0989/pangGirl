@@ -18,25 +18,37 @@ class Character extends egret.DisplayObjectContainer {
         window.addEventListener("keydown", (e) => {
             if (e.keyCode == 37 && this.human.x > PangGlobal.sPositionX) {
                 this.human.getController("c1").selectedPage = "left";
-                if (SceneManager.stage.blocked.has((this.human.x - PangGlobal.interpol) + "," + this.human.y)) return;
+                if (this.isNotPassBlock(this.human.x - PangGlobal.interpol, this.human.y)) return;
                 this.human.x -= PangGlobal.interpol;
             }
             if (e.keyCode == 38 && this.human.y > PangGlobal.sPositionY) {
                 this.human.getController("c1").selectedPage = "back";
-                if (SceneManager.stage.blocked.has(this.human.x + "," + (this.human.y - PangGlobal.interpol))) return;
+                if (this.isNotPassBlock(this.human.x, this.human.y - PangGlobal.interpol)) return;
                 this.human.y -= PangGlobal.interpol;
             }
             if (e.keyCode == 39 && this.human.x < (PangGlobal.sWidth + PangGlobal.sPositionX - PangGlobal.interpol * 4)) {
                 this.human.getController("c1").selectedPage = "right";
-                if (SceneManager.stage.blocked.has((this.human.x + PangGlobal.interpol) + "," + this.human.y)) return;
+                if (this.isNotPassBlock(this.human.x + PangGlobal.interpol, this.human.y)) return;
                 this.human.x += PangGlobal.interpol;
             }
             if (e.keyCode == 40 && this.human.y < (PangGlobal.sHeight + PangGlobal.sPositionY - PangGlobal.interpol * 4)) {
                 this.human.getController("c1").selectedPage = "front";
-                if (SceneManager.stage.blocked.has(this.human.x + "," + (this.human.y + PangGlobal.interpol))) return;
+                if (this.isNotPassBlock(this.human.x, this.human.y + PangGlobal.interpol)) return;
                 this.human.y += PangGlobal.interpol;
             }
         });
+    }
+
+    private isNotPassBlock(humanNewX: number, humanNewY: number) {
+        let human = this.human.displayObject;
+        let blockObj = TmxUtil.getObjectArrayByType(SceneManager.stage.field, "trigger", "block");
+        human.x = humanNewX;
+        human.y = humanNewY;
+
+        for (let i = 0; i < blockObj.length; i++) {
+            if (this.isCollision(human, blockObj[i])) return true;
+        }
+        return false;
     }
 
     private isCollision(obj1: egret.DisplayObject, obj2: egret.DisplayObject): boolean {
